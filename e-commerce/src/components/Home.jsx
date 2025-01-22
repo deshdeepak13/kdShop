@@ -27,7 +27,7 @@ const Home = () => {
 
   return (
     <>
-    <section className='banners mt-16'>
+    <section className='banners'>
       
     <Carousel
         showArrows={true}
