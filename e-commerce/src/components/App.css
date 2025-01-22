@@ -1,0 +1,19 @@
+/* blur property when login/signup page come */
+
+.app-container {
+    transition: filter 0.3s ease;
+  }
+  
+  .app-container.blur {
+    filter: blur(8px); /* Adjust the blur radius */
+  }
+  
+  .modal-backdrop {
+    backdrop-filter: blur(5px); /* Optional: blur background behind modal */
+  }
+  
+  .modal-content {
+    min-width: 400px;
+    max-width: 90%;
+  }
+  
