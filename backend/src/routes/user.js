@@ -1,6 +1,7 @@
 import express from 'express';
 import { body, validationResult } from 'express-validator';
 import User from '../models/userSchema.js'; // Import the User model
+import Order from '../models/orderSchema.js'; // Import the User model
 // import Product from '../models/productSchema.js'; // Import the Product model
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -178,6 +179,61 @@ router.post('/verifyToken', async (req, res) => {
     res.status(401).json({ success: false, message: 'Invalid token' });
   }
 });
+
+
+
+
+/**
+ * @route   GET /api/v1/user/:id
+ * @desc    Fetch user profile by ID
+ * @access  Private
+ */
+router.get("/", verifyTokenMiddleware, async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    // Fetch user by ID
+    const user = await User.findById(userId).select("-password"); // Exclude the password field
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    // Respond with user data
+    res.status(200).json({
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      dob: user.dob || null, // Optional field
+      photo: user.photo || "default-profile.jpg", // Provide default image if none exists
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: "Server error." });
+  }
+});
+
+
+
+// GET /api/v1/orders/transactions
+// Fetch transactions for a specific user
+router.get("/transactions", verifyTokenMiddleware, async (req, res) => {
+  // console.log(req.user);
+  // console.log(2);
+  try {
+    console.log("User ID in transaction-history route:", req.user?.id);
+    const transactions = await Order.find({ user: req.user.id }) // Filter by the authenticated user
+    .populate("orderItems.product", "name price image") // Populate product details
+    .sort({ createdAt: -1 }); // Sort by latest orders
+    
+    res.status(200).json(transactions);
+  } catch (error) {
+    console.log("User ID in transaction-history route:", req.user?.id);
+    // console.log(error)
+    // console.error("Error fetching transactions:", error);
+    res.status(500).json({ message: "Failed to fetch transactions." });
+  }
+});
+
 
 
 

@@ -2,6 +2,12 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors'
+import path from 'path';
+import { fileURLToPath } from "url";
+
+// Define __dirname in an ES module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Initialize environment variables
 dotenv.config();
@@ -23,6 +29,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use('/public', express.static('public'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// app.use('/uploads', express.static('uploads'));
 
 
 // Connect to MongoDB

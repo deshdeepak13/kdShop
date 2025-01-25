@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-const verifyTokenMiddleware = (req, res, next) => {
+const adminTokenMiddleware = (req, res, next) => {
   // Get the token from the authorization header
   // console.log(req.headers.authorization)
   
@@ -27,4 +27,4 @@ const verifyTokenMiddleware = (req, res, next) => {
   }
 };
 
-export default verifyTokenMiddleware;
+export default adminTokenMiddleware;

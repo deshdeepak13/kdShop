@@ -20,10 +20,12 @@ const Home = lazy(() => import('./components/Home'));
 const Search = lazy(() => import('./components/Search'));
 const Cart = lazy(() => import('./components/Cart'));
 const Checkout = lazy(() => import('./components/Checkout'));
+const Profile = lazy(() => import('./components/Profile/Profile'));
 // const Login = lazy(() => import('./components/Login'));
 // const Signup = lazy(() => import('./components/Signup'));
 const OrdersPage = lazy(() => import('./components/OrdersPage'));
 const WishList = lazy(() => import('./components/WishList'));
+const CouponsPage = lazy(() => import('./components/Coupons'));
 
 const App = () => {
 
@@ -87,22 +89,22 @@ const App = () => {
             </Suspense>
           }
         />
-        {/* <Route
-          path="/signup"
+        <Route
+          path="/profile"
           element={
             <Suspense fallback={<Loading />}>
-              <Signup />
+              <Profile />
             </Suspense>
           }
-        /> */}
-        {/* <Route
-          path="/login"
+        />
+        <Route
+          path="/coupons"
           element={
             <Suspense fallback={<Loading />}>
-              <Login />
+              <CouponsPage />
             </Suspense>
           }
-        /> */}
+        />
         <Route
           path="/orders"
           element={

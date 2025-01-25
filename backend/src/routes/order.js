@@ -2,6 +2,8 @@ import express from "express";
 import Order from "../models/orderSchema.js"; // Import Order model
 import User from "../models/userSchema.js"; // Import Order model
 import verifyTokenMiddleware from '../middlewares/verifyTokenMiddleware.js'
+import mongoose from "mongoose";
+
 // import { authenticateUser } from "../middleware/authMiddleware.js"; // Middleware to protect routes
 
 const router = express.Router();
@@ -72,69 +74,60 @@ router.get("/", verifyTokenMiddleware, async (req, res) => {
 // Get User-Specific Orders
 // -------------------
 router.get("/my-orders", verifyTokenMiddleware, async (req, res) => {
-    // console.log(req.user.id)
-    try {
-        
-      const userOrders = await Order.aggregate([
-        
-        // Match orders for the logged-in user
-        { $match: { userId: req.user.id } },
-        
-        // Sort by createdAt in descending order
-        { $sort: { createdAt: -1 } },
-        
-        // Unwind the orderItems array to deconstruct each product
-        { $unwind: "$orderItems" },
-        
-        // Lookup product details from the Product collection
-        {
-          $lookup: {
-            from: "products", // Collection name for products
-            localField: "orderItems.productId", // Field in Order collection
-            foreignField: "_id", // Field in Product collection
-            as: "productDetails", // Output array
-          },
+  try {
+    const userOrders = await Order.aggregate([
+      // Match orders for the logged-in user
+      { $match: { user:new mongoose.Types.ObjectId(req.user.id) } },
+
+      // Unwind the orderItems array
+      { $unwind: "$orderItems" },
+
+      // Lookup product details from the Product collection
+      {
+        $lookup: {
+          from: "products", // Collection name for products
+          localField: "orderItems.product", // Field in Order collection
+          foreignField: "_id", // Field in Product collection
+          as: "productDetails", // Output array
         },
-        
-        // Flatten the productDetails array (each product should match exactly one)
-        { $unwind: "$productDetails" },
-        
-        // Reconstruct the orderItems array with product details
-        {
-          $group: {
-            _id: "$_id",
-            userId: { $first: "$userId" },
-            transactionId: { $first: "$transactionId" },
-            totalPrice: { $first: "$totalPrice" },
-            status: { $first: "$status" },
-            createdAt: { $first: "$createdAt" },
-            shippingAddress: { $first: "$shippingAddress" },
-            orderItems: {
-              $push: {
-                productId: "$orderItems.productId",
-                quantity: "$orderItems.quantity",
-                price: "$orderItems.price",
-                productName: "$productDetails.name",
-                imageUrl:  { $arrayElemAt: ["$productDetails.imageUrl", 0] }
-              },
+      },
+
+      // Flatten productDetails array
+      { $unwind: "$productDetails" },
+
+      // Group by order to reassemble orderItems with product details
+      {
+        $group: {
+          _id: "$_id",
+          user: { $first: "$user" },
+          paymentInfo: { $first: "$paymentInfo" },
+          totalPrice: { $first: "$totalPrice" },
+          status: { $first: "$status" },
+          createdAt: { $first: "$createdAt" },
+          shippingAddress: { $first: "$shippingAddress" },
+          orderItems: {
+            $push: {
+              productId: "$orderItems.product",
+              quantity: "$orderItems.quantity",
+              price: "$orderItems.price",
+              productName: "$productDetails.name",
+              imageUrl: "$productDetails.imageUrl", // Entire array of images
             },
           },
         },
-      ]);
-    // const userOrders = await Order.aggregate([
-    //     { $match: { userId: req.user.id } }, // Match orders for this user
-    //   ]);
-    //   console.log(userOrders); // Debug output
-      
-    //   console.log(userOrders); // Debug output
-  
-      res.status(200).json(userOrders);
-    //   res.send(200).json(userOrders);
-    } catch (error) {
-      console.error("Fetch User Orders Error:", error.message);
-      res.status(500).json({ error: "Failed to fetch user orders." });
-    }
-  });
+      },
+
+      // Sort orders by creation date (latest first)
+      { $sort: { createdAt: -1 } },
+    ]);
+
+    res.status(200).json(userOrders);
+  } catch (error) {
+    console.error("Fetch User Orders Error:", error.message);
+    res.status(500).json({ error: "Failed to fetch user orders." });
+  }
+});
+
   
 
 // -------------------

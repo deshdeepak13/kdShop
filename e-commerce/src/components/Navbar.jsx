@@ -10,7 +10,7 @@ const Navbar = ({ openLogin, openSignup }) => {
 
   return (
     <>
-    <nav className='bg-black static top-0 left-0 w-full z-50 '>
+    <nav className='bg-black sticky top-0 left-0 w-full z-50 '>
       <div className='flex py-5 px-20 justify-between items-center'>
         <div className="logo font-bold text-xl text-white"><Link to="/">pottyShop</Link></div>
       
