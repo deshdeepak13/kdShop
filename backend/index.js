@@ -18,6 +18,7 @@ import productRoute from "./src/routes/products.js";
 import wishlistRoute from "./src/routes/wishlist.js";
 import paymentintentRoute from "./src/routes/paymentintent.js";
 import orderRoute from "./src/routes/order.js";
+import adminRoute from "./src/routes/admin.js";
 // import paymentRoute from "./routes/payment.js";
 // import dashboardRoute from "./routes/stats.js";
 
@@ -53,6 +54,7 @@ app.use("/api/v1/products", productRoute);
 app.use("/api/v1/wishlist", wishlistRoute);
 app.use("/api/v1/payments", paymentintentRoute);
 app.use("/api/v1/orders", orderRoute);
+app.use("/api/v1/admin", adminRoute);
 // app.use("/api/v1/payment", paymentRoute);
 // app.use("/api/v1/dashboard", dashboardRoute);
 

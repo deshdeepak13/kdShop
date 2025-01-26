@@ -13,7 +13,7 @@ const Login = ({ onClose}) => {
     register,
     handleSubmit,
     formState: { errors },reset
-  } = useForm();
+  } = useForm();  
 
   const onSubmit = async (data) => {
     try {
