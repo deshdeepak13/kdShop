@@ -1,102 +1,78 @@
 import React, { useEffect, useState } from 'react';
-import "react-responsive-carousel/lib/styles/carousel.min.css"; //lib/styles/carousel.min.css
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 import ProductCard from './ProductCard';
 import axios from 'axios';
+import { useSelector } from "react-redux";
 
 const Home = () => {
-
   const [products, setProducts] = useState([]);
+  const wishlist = useSelector((state) => state.wishlist.wishlistItems || []);
 
   useEffect(() => {
     // Fetch product data from backend
     const fetchProducts = async () => {
       try {
         const response = await axios.get('http://localhost:3000/api/v1/products');
-        setProducts(response.data); // Assuming the response has a 'products' field
-        // console.log(response.data);
+        setProducts(response.data); // Assuming the response has the array directly
       } catch (error) {
         console.error("Error fetching products:", error);
       }
     };
 
     fetchProducts();
-  }, []); // Empty dependency array ensures this runs once on mount
-
-
+  }, []);
 
   return (
     <>
-    <section className='banners'>
-      
-    <Carousel
-        showArrows={true}
-        autoPlay={true}
-        infiniteLoop={true}
-        showThumbs={false}
-        showStatus={false}
-        interval={1500}
-      >
-        <div>
-          <img src="slide1.webp" alt="Image 1" />
-          {/* <p className="legend">Image 1</p> */}
-        </div>
-        <div>
-          <img src="slide3.webp" alt="Image 2" />
-          {/* <p className="legend">Image 2</p> */}
-        </div>
-        <div>
-          <img src="slide1.webp" alt="Image 3" />
-          {/* <p className="legend">Image 3</p> */}
-        </div>
-      </Carousel>
+      {/* Banner Section */}
+      <section className="banners">
+        <Carousel
+          showArrows={true}
+          autoPlay={true}
+          infiniteLoop={true}
+          showThumbs={false}
+          showStatus={false}
+          interval={3000}
+          className="shadow-lg rounded-lg overflow-hidden"
+        >
+          <div>
+            <img src="slide1.webp" alt="Image 1" className="object-cover w-full h-64" />
+          </div>
+          <div>
+            <img src="slide3.webp" alt="Image 2" className="object-cover w-full h-64" />
+          </div>
+          <div>
+            <img src="slide1.webp" alt="Image 3" className="object-cover w-full h-64" />
+          </div>
+        </Carousel>
+      </section>
 
-
-    </section>
-
-
-
-    <section className="section1 flex mt-10 gap-5 flex-wrap">
-
-    {Array.isArray(products) && products.length > 0 ? (
-          products.map(product => (
-            <ProductCard
-              key={product._id}
-              name={product.name}
-              id={product._id}
-              price={product.currentPrice}
-              originalPrice={product.MRP}
-              discount={product.discount}
-              imageUrl={`http://localhost:3000/public/images/${product.imageUrl?.[0] || 'default-product.jpg'}`}
-
-            />  
-          ))
+      {/* Product Section */}
+      <section className="section1 flex mt-10 gap-5 flex-wrap">
+        {Array.isArray(products) && products.length > 0 ? (
+          products.map(product => {
+            const isWishlisted = wishlist.some((item) => item.id === product._id);
+            return (
+              <ProductCard
+                key={product._id}
+                id={product._id}
+                name={product.name}
+                price={product.currentPrice}
+                originalPrice={product.MRP}
+                discount={product.discount}
+                imageUrl={`http://localhost:3000/public/images/${product.imageUrl?.[0] || 'default-product.jpg'}`}
+                stock={product.stock}
+                isWishlisted={isWishlisted}
+              />
+            );
+          })
         ) : (
-          <p>No products found.</p>
+          <p className="text-gray-500">No products found.</p>
         )}
-
-    
-
-{/* <div>
-<ProductCard
-        name="Condom"
-        id={2}
-        price={500}
-        originalPrice={700}
-        discount={25}
-        imageUrl="https://rukminim2.flixcart.com/image/612/612/xif0q/condom/e/v/e/-original-imahfhvhgvpkgbcd.jpeg?q=70"
-      />
-    </div> */}
-
-
-
-    </section>
-
-
-
-
+      </section>
     </>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

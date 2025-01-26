@@ -3,6 +3,7 @@ import ProductManagement from "./ProductManagement";
 import UserManagement from "./UserManagement";
 import OrderManagement from "./OrderManagement";
 import Dashboard from "./Dashboard";
+import CouponGenerator from "./CouponGenerator";
 
 const Admin = ({onLogout}) => {
   const [selectedSection, setSelectedSection] = useState("dashboard");
@@ -65,6 +66,16 @@ const Admin = ({onLogout}) => {
               Order Management
             </button>
           </li>
+          <li>
+            <button
+              className={`w-full text-left py-2 px-4 hover:bg-gray-700 rounded ${
+                selectedSection === "order-management" ? "bg-gray-700" : ""
+              }`}
+              onClick={() => handleSectionChange("generate-coupon")}
+            >
+              Generate Coupon
+            </button>
+          </li>
         </ul>
 
         {/* Logout Button */}
@@ -82,6 +93,7 @@ const Admin = ({onLogout}) => {
         {selectedSection === "product-management" && <ProductManagement />}
         {selectedSection === "user-management" && <UserManagement />}
         {selectedSection === "order-management" && <OrderManagement />}
+        {selectedSection === "generate-coupon" && <CouponGenerator />}
       </div>
     </div>
   );

@@ -13,7 +13,7 @@ const Cart = () => {
   const [couponCode, setCouponCode] = useState(""); // State to hold the coupon code input
   const { token, user, isLoggedIn } = useSelector((state) => state.auth);
   const { cartItems, loading, error, coupon, discount } = useSelector((state) => state.cart);
-
+ 
   // Fetch cart items on component mount or when token/user changes
   useEffect(() => {
     if (token && user?.id) {

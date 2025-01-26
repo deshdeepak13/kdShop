@@ -182,6 +182,57 @@ router.post('/verifyToken', async (req, res) => {
 
 
 
+router.post("/change-password", verifyTokenMiddleware, async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+  const userId = req.user.id; // Extracted from the authenticated token
+
+  // Validate input
+  if (!currentPassword || !newPassword) {
+    return res.status(400).json({ success: false, message: "All fields are required" });
+  }
+  if (newPassword.length < 8) {
+    return res
+      .status(400)
+      .json({ success: false, message: "New password must be at least 8 characters long" });
+  }
+
+  try {
+    // Fetch user from the database
+    const user = await User.findById(userId).select("+password");
+    console.log(user);
+
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    // Verify the current password
+    const isPasswordMatch = await bcrypt.compare(currentPassword, user.password);
+
+    if (!isPasswordMatch) {
+      return res.status(401).json({ success: false, message: "Current password is incorrect" });
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update user's password
+    user.password = hashedPassword;
+    await user.save();
+
+    return res
+      .status(200)
+      .json({ success: true, message: "Password updated successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ success: false, message: "Failed to update password" });
+  }
+});
+
+
+
+
+
 
 
 

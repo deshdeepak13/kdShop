@@ -1,22 +1,75 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 const ChangePassword = () => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage(null);
+
+    // Check if new password and confirm password match
     if (newPassword !== confirmPassword) {
-      alert("New password and confirm password do not match.");
-    } else {
-      alert("Password changed successfully!");
+      setMessage({ type: "error", text: "New password and confirm password do not match." });
+      return;
+    }
+
+    // Check for password strength
+    if (newPassword.length < 6) {
+      setMessage({ type: "error", text: "Password must be at least 6 characters long." });
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      // Call the change password API
+      const token = localStorage.getItem("token"); // Replace with your token logic
+      const response = await axios.post(
+        "http://localhost:3000/api/v1/user/change-password",
+        { currentPassword, newPassword },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setMessage({ type: "success", text: response.data.message });
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (error) {
+      setMessage({
+        type: "error",
+        text: error.response?.data?.message || "Failed to change password.",
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="mt-8 mx-0 bg-gray-800 p-6 rounded-lg shadow-md">
       <h2 className="text-2xl font-semibold text-left mb-6 text-white">Change Password</h2>
+
+      {/* Message Display */}
+      {message && (
+        <div
+          className={`p-3 mb-4 rounded ${
+            message.type === "success"
+              ? "bg-green-500 text-white"
+              : "bg-red-500 text-white"
+          }`}
+        >
+          {message.text}
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Current Password */}
         <div>
@@ -70,9 +123,12 @@ const ChangePassword = () => {
         <div className="flex">
           <button
             type="submit"
-            className="m-auto w-fit p-2 bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            disabled={loading}
+            className={`m-auto w-fit p-2 bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+              loading && "opacity-50 cursor-not-allowed"
+            }`}
           >
-            Change Password
+            {loading ? "Changing..." : "Change Password"}
           </button>
         </div>
       </form>

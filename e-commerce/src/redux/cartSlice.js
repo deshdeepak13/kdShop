@@ -8,6 +8,7 @@ const initialState = {
   discount: 0,  // Discount percentage (if coupon is applied)
   loading: false,
   error: null,
+  couponError:null,
 };
 
 const cartSlice = createSlice({
@@ -69,8 +70,10 @@ const cartSlice = createSlice({
       state.error = action.payload;
     },
     applyCoupon: (state, action) => {
-      state.coupon = action.payload.coupon;
-      state.discount = action.payload.discount; // Assume the discount is a percentage
+      const { coupon, discount } = action.payload;
+      state.coupon = coupon;
+      state.discount = discount;
+      state.couponError = null;  // Clear any previous errors
     },
 
     // Remove applied coupon and discount
@@ -162,6 +165,7 @@ export const applyCouponToCart = (token, userId, couponCode) => async (dispatch)
       { couponCode },
       { headers: { Authorization: `Bearer ${token}` } }
     );
+    console.log(response.data);
     
     if (response.data.isValid) {
       dispatch(applyCoupon({
@@ -172,7 +176,10 @@ export const applyCouponToCart = (token, userId, couponCode) => async (dispatch)
       dispatch(setError('Invalid coupon'));
     }
   } catch (error) {
-    dispatch(setError(error.message));
+    // console.log(error)
+    console.log(error.toJSON());
+
+    dispatch(setError(error.message));  
   }
 };
 
