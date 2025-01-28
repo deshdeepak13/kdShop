@@ -1,68 +1,84 @@
-import React from 'react'
-import { NavLink,Link } from 'react-router-dom'
-import DropdownMenu from './DropDownMenu'
+import React from 'react';
+import { NavLink, Link } from 'react-router-dom';
+import DropdownMenu from './DropDownMenu';
 import { useSelector } from 'react-redux';
-
 
 const Navbar = ({ openLogin, openSignup }) => {
   const { isLoggedIn, user } = useSelector((state) => state.auth);
 
-
   return (
     <>
-    <nav className='bg-black sticky top-0 left-0 w-full z-50 '>
-      <div className='flex py-5 px-20 justify-between items-center'>
-        <div className="logo font-bold text-xl text-white"><Link to="/">pottyShop</Link></div>
-      
-      <div className="items flex gap-5">
-{/* <a href=""></a> */} 
-      <NavLink
-      to="/"
-      className={({ isActive }) =>
-        isActive ? 'text-purple-700' : 'text-purple-100' // Apply red text when active, purple otherwise
-      }
-    >
-      Home
-    </NavLink>
+      <nav className="bg-gray-950 top-0 left-0 w-full z-50 shadow-lg sticky">
+        <div className="flex py-4 px-10 justify-between items-center">
+          {/* Logo */}
+          <div className="logo font-bold text-2xl text-white tracking-wide">
+            <Link to="/" className="hover:text-purple-300 transition duration-300">
+              pottyShop
+            </Link>
+          </div>
 
-      <NavLink
-      to="/search"
-      className={({ isActive }) =>
-        isActive ? 'text-purple-700' : 'text-purple-100' // Apply red text when active, purple otherwise
-      }
-    >
-      Search
-    </NavLink>
+          {/* Navigation Items */}
+          <div className="items flex gap-8 text-lg">
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                `hover:text-purple-300 transition duration-300 ${
+                  isActive ? 'text-purple-300 underline' : 'text-white'
+                }`
+              }
+            >
+              Home
+            </NavLink>
 
-      {isLoggedIn?(<><NavLink
-      to="/cart"
-      className={({ isActive }) =>
-        isActive ? 'text-purple-700' : 'text-purple-100' // Apply red text when active, purple otherwise
-      }
-    >
-      Cart
-    </NavLink>
+            <NavLink
+              to="/search"
+              className={({ isActive }) =>
+                `hover:text-purple-300 transition duration-300 ${
+                  isActive ? 'text-purple-300 underline' : 'text-white'
+                }`
+              }
+            >
+              Search
+            </NavLink>
 
-    <div><DropdownMenu title={user.name}/></div></>):
-    <>
-    <button onClick={openLogin} className={" text-white font-semibold rounded-md  bg-purple-700 px-1 hover:opacity-90"} >Login</button> 
-    <button onClick={openSignup} className={" text-white font-semibold rounded-md  bg-purple-700 px-1 hover:opacity-90"} >Signup</button>
-    </>}
-      {/* <NavLink
-      to="/profile"
-      className={({ isActive }) =>
-        isActive ? 'text-purple-700' : 'text-purple-100' // Apply red text when active, purple otherwise
-      }
-    >
-      Profile
-    </NavLink> */}
+            {isLoggedIn ? (
+              <>
+                <NavLink
+                  to="/cart"
+                  className={({ isActive }) =>
+                    `hover:text-purple-300 transition duration-300 ${
+                      isActive ? 'text-purple-300 underline' : 'text-white'
+                    }`
+                  }
+                >
+                  Cart
+                </NavLink>
 
-      </div>
-      </div>
-    </nav>
-    
+                <div>
+                  <DropdownMenu title={user.name} />
+                </div>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={openLogin}
+                  className="text-white font-semibold rounded-md bg-purple-600 px-4 py-1 hover:bg-purple-500 transition duration-300"
+                >
+                  Login
+                </button>
+                <button
+                  onClick={openSignup}
+                  className="text-white font-semibold rounded-md bg-purple-600 px-4 py-1 hover:bg-purple-500 transition duration-300"
+                >
+                  Signup
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      </nav>
     </>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

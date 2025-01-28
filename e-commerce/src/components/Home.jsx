@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Carousel } from 'react-responsive-carousel';
-import ProductCard from './ProductCard';
-import axios from 'axios';
+import { Carousel } from "react-responsive-carousel";
+import ProductCard from "./ProductCard";
+import axios from "axios";
 import { useSelector } from "react-redux";
 
 const Home = () => {
@@ -13,7 +13,7 @@ const Home = () => {
     // Fetch product data from backend
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/v1/products');
+        const response = await axios.get("http://localhost:3000/api/v1/products");
         setProducts(response.data); // Assuming the response has the array directly
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -26,32 +26,31 @@ const Home = () => {
   return (
     <>
       {/* Banner Section */}
-      <section className="banners">
+      <section className="banners bg-gray-900">
         <Carousel
           showArrows={true}
           autoPlay={true}
           infiniteLoop={true}
           showThumbs={false}
           showStatus={false}
-          interval={3000}
-          className="shadow-lg rounded-lg overflow-hidden"
+          interval={1500}
         >
           <div>
-            <img src="slide1.webp" alt="Image 1" className="object-cover w-full h-64" />
+            <img src="slide1.webp" alt="Image 1" className="rounded-lg shadow-lg" />
           </div>
           <div>
-            <img src="slide3.webp" alt="Image 2" className="object-cover w-full h-64" />
+            <img src="slide3.webp" alt="Image 2" className="rounded-lg shadow-lg" />
           </div>
           <div>
-            <img src="slide1.webp" alt="Image 3" className="object-cover w-full h-64" />
+            <img src="slide1.webp" alt="Image 3" className="rounded-lg shadow-lg" />
           </div>
         </Carousel>
       </section>
 
       {/* Product Section */}
-      <section className="section1 flex mt-10 gap-5 flex-wrap">
+      <section className="section1 flex mt-10 gap-5 flex-wrap p-6 bg-gray-800 text-white">
         {Array.isArray(products) && products.length > 0 ? (
-          products.map(product => {
+          products.map((product) => {
             const isWishlisted = wishlist.some((item) => item.id === product._id);
             return (
               <ProductCard
@@ -61,14 +60,16 @@ const Home = () => {
                 price={product.currentPrice}
                 originalPrice={product.MRP}
                 discount={product.discount}
-                imageUrl={`http://localhost:3000/public/images/${product.imageUrl?.[0] || 'default-product.jpg'}`}
+                imageUrl={`http://localhost:3000/public/images/${
+                  product.imageUrl?.[0] || "default-product.jpg"
+                }`}
                 stock={product.stock}
                 isWishlisted={isWishlisted}
               />
             );
           })
         ) : (
-          <p className="text-gray-500">No products found.</p>
+          <p className="text-gray-400">No products found.</p>
         )}
       </section>
     </>

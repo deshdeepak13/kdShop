@@ -60,11 +60,11 @@ router.post("/", verifyTokenMiddleware, async (req, res) => {
           throw new Error(`Product with ID ${item.product} not found.`);
         }
 
-        if (product.quantity < item.quantity) {
+        if (product.stock < item.quantity) {
           throw new Error(`Not enough stock for product: ${product.name}`);
         }
 
-        product.quantity -= item.quantity;
+        product.stock -= item.quantity;
         await product.save({ session });
       }
 

@@ -19,20 +19,20 @@ const AddressForm = ({ onSave, onCancel }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {/* Name Field */}
       <div>
-        <label>Name</label>
+        <label className="text-lg">Name</label>
         <input
           {...register("name", { required: "Name is required" })}
-          className="border p-2 w-full"
+          className="border border-gray-600 p-3 w-full bg-gray-800 text-white rounded-lg"
         />
         {errors.name && <p className="text-red-600">{errors.name.message}</p>}
       </div>
 
       {/* Mobile Field */}
       <div>
-        <label>Mobile</label>
+        <label className="text-lg">Mobile</label>
         <input
           {...register("mobile", {
             required: "Mobile number is required",
@@ -41,14 +41,14 @@ const AddressForm = ({ onSave, onCancel }) => {
               message: "Mobile number must be 10 digits",
             },
           })}
-          className="border p-2 w-full"
+          className="border border-gray-600 p-3 w-full bg-gray-800 text-white rounded-lg"
         />
         {errors.mobile && <p className="text-red-600">{errors.mobile.message}</p>}
       </div>
 
       {/* Pincode Field */}
       <div>
-        <label>Pincode</label>
+        <label className="text-lg">Pincode</label>
         <input
           {...register("pincode", {
             required: "Pincode is required",
@@ -57,45 +57,45 @@ const AddressForm = ({ onSave, onCancel }) => {
               message: "Pincode must be 6 digits",
             },
           })}
-          className="border p-2 w-full"
+          className="border border-gray-600 p-3 w-full bg-gray-800 text-white rounded-lg"
         />
         {errors.pincode && <p className="text-red-600">{errors.pincode.message}</p>}
       </div>
 
       {/* Address Fields */}
       <div>
-        <label>Locality</label>
+        <label className="text-lg">Locality</label>
         <input
           {...register("locality", { required: "Locality is required" })}
-          className="border p-2 w-full"
+          className="border border-gray-600 p-3 w-full bg-gray-800 text-white rounded-lg"
         />
         {errors.locality && <p className="text-red-600">{errors.locality.message}</p>}
       </div>
 
       <div>
-        <label>Address (Area and Street)</label>
+        <label className="text-lg">Address (Area and Street)</label>
         <input
           {...register("address", { required: "Address is required" })}
-          className="border p-2 w-full"
+          className="border border-gray-600 p-3 w-full bg-gray-800 text-white rounded-lg"
         />
         {errors.address && <p className="text-red-600">{errors.address.message}</p>}
       </div>
 
       {/* City and State Fields */}
       <div>
-        <label>City/Town/District</label>
+        <label className="text-lg">City/Town/District</label>
         <input
           {...register("city", { required: "City is required" })}
-          className="border p-2 w-full"
+          className="border border-gray-600 p-3 w-full bg-gray-800 text-white rounded-lg"
         />
         {errors.city && <p className="text-red-600">{errors.city.message}</p>}
       </div>
 
       <div>
-        <label>State</label>
+        <label className="text-lg">State</label>
         <select
           {...register("state", { required: "State is required" })}
-          className="border p-2 w-full"
+          className="border border-gray-600 p-3 w-full bg-gray-800 text-white rounded-lg"
         >
           <option value="">Select State</option>
           <option value="State1">State1</option>
@@ -107,12 +107,15 @@ const AddressForm = ({ onSave, onCancel }) => {
 
       {/* Optional Fields */}
       <div>
-        <label>Landmark (Optional)</label>
-        <input {...register("landmark")} className="border p-2 w-full" />
+        <label className="text-lg">Landmark (Optional)</label>
+        <input
+          {...register("landmark")}
+          className="border border-gray-600 p-3 w-full bg-gray-800 text-white rounded-lg"
+        />
       </div>
 
       <div>
-        <label>Alternate Phone Number (Optional)</label>
+        <label className="text-lg">Alternate Phone Number (Optional)</label>
         <input
           {...register("alternatePhone", {
             pattern: {
@@ -120,29 +123,49 @@ const AddressForm = ({ onSave, onCancel }) => {
               message: "Alternate phone number must be 10 digits",
             },
           })}
-          className="border p-2 w-full"
+          className="border border-gray-600 p-3 w-full bg-gray-800 text-white rounded-lg"
         />
-        {errors.alternatePhone && <p className="text-red-600">{errors.alternatePhone.message}</p>}
+        {errors.alternatePhone && (
+          <p className="text-red-600">{errors.alternatePhone.message}</p>
+        )}
       </div>
 
       {/* Home/Work Checkbox */}
-      <div className="flex items-center space-x-4">
-        <label>
-          <input type="radio" value="Home" {...register("addressType", { required: true })} />
-          Home
+      <div className="flex items-center space-x-6">
+        <label className="flex items-center">
+          <input
+            type="radio"
+            value="Home"
+            {...register("addressType", { required: true })}
+            className="bg-gray-800"
+          />
+          <span className="ml-2">Home</span>
         </label>
-        <label>
-          <input type="radio" value="Work" {...register("addressType", { required: true })} />
-          Work
+        <label className="flex items-center">
+          <input
+            type="radio"
+            value="Work"
+            {...register("addressType", { required: true })}
+            className="bg-gray-800"
+          />
+          <span className="ml-2">Work</span>
         </label>
       </div>
 
       {/* Save and Cancel Buttons */}
-      <div className="flex space-x-4">
-        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded" disabled={Object.keys(errors).length > 0}>
+      <div className="flex space-x-6">
+        <button
+          type="submit"
+          className="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition-colors"
+          disabled={Object.keys(errors).length > 0}
+        >
           Save
         </button>
-        <button type="button" onClick={handleCancel} className="bg-gray-600 text-white px-4 py-2 rounded">
+        <button
+          type="button"
+          onClick={handleCancel}
+          className="bg-gray-600 text-white py-2 px-6 rounded-lg hover:bg-gray-700 transition-colors"
+        >
           Cancel
         </button>
       </div>

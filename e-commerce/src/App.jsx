@@ -41,6 +41,7 @@ const App = () => {
 
   return (
     <>
+    <div className="min-h-screen bg-gray-900 text-white">
       {/* Conditionally render Navbar */}
       {!excludeNavbarRoutes.includes(location.pathname) && (
         <Navbar openLogin={openLogin} openSignup={openSignup} />
@@ -133,6 +134,7 @@ const App = () => {
       <Modal isOpen={isSignupOpen} onClose={closeSignup}>
         <Signup onClose={closeSignup} />
       </Modal>
+      </div>
     </>
   );
 };

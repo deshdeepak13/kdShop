@@ -9,20 +9,7 @@ const CheckoutPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Track modal visibility
 
   const handleSave = (formData) => {
-    // Validate address fields
-    // if (
-    //   !formData.name ||
-    //   !formData.phone ||
-    //   !formData.address ||
-    //   !formData.city ||
-    //   !formData.state ||
-    //   !formData.zip
-    // ) {
-      // alert("Please fill out all required fields.");
-      // return;
-    // }
     setAddress(formData); // Save form data to state
-    // localStorage.setItem("savedAddress", JSON.stringify(formData)); // Persist to localStorage
     setIsEditing(false); // Switch to static mode
   };
 
@@ -45,13 +32,13 @@ const CheckoutPage = () => {
   return (
     <div className="flex flex-col md:flex-row gap-8 p-8">
       {/* Order Summary Section */}
-      <aside className="w-full md:w-1/3 bg-gray-100 p-4 rounded-lg shadow">
+      <aside className="w-full md:w-1/3 bg-gray-800 text-white p-6 rounded-lg shadow-lg">
         <OrderSummary />
       </aside>
 
       {/* Address and Checkout Form */}
-      <main className="w-full md:w-2/3 bg-white p-6 rounded-lg shadow">
-        <h2 className="text-xl font-semibold mb-4">Delivery Address</h2>
+      <main className="w-full md:w-2/3 bg-gray-900 text-white p-6 rounded-lg shadow-lg">
+        <h2 className="text-xl font-semibold mb-6">Delivery Address</h2>
         {isEditing ? (
           <AddressForm
             onSave={handleSave}
@@ -72,7 +59,7 @@ const CheckoutPage = () => {
             </p>
             <button
               onClick={handleEdit}
-              className="mt-4 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+              className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
             >
               Edit Address
             </button>
@@ -80,7 +67,7 @@ const CheckoutPage = () => {
             {/* Proceed Button */}
             <button
               onClick={handleProceed}
-              className="mt-4 bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700"
+              className="mt-4 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors"
             >
               Proceed
             </button>

@@ -4,16 +4,17 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { login } from '../redux/authSlice'; // Adjust path
+import { IoClose } from "react-icons/io5";
 
-const Login = ({ onClose}) => {
-  // const navigate = use
+const Login = ({ onClose }) => {
   const dispatch = useDispatch();
 
   const {
     register,
     handleSubmit,
-    formState: { errors },reset
-  } = useForm();  
+    formState: { errors },
+    reset,
+  } = useForm();
 
   const onSubmit = async (data) => {
     try {
@@ -23,51 +24,52 @@ const Login = ({ onClose}) => {
 
       // Store JWT token and user details in localStorage
       const { jwtToken, email, name } = response.data;
-      dispatch(login({ user: { email, name}, token: jwtToken }));
+      dispatch(login({ user: { email, name }, token: jwtToken }));
 
       // Store JWT in localStorage for persistence
       localStorage.setItem('token', jwtToken);
-      // localStorage.setItem('token', response.data.jwtToken);
-      // Optionally, redirect to another page or show a success message
-      // navigate('/dashboard'); // Redirect to a dashboard or home page
 
-      // Reset the form and clear photo input
+      // Reset the form
       reset();
-      // setPhoto(null);
     } catch (error) {
       console.error('Login failed:', error.response ? error.response.data : error.message);
-      // Handle login errors (display an error message)
     }
   };
 
   return (
-    <div className="flex justify-center items-center rounded-lg shadow-lg overflow-auto my-32 relative">
-      <button className='text-white absolute top-1 right-1 bg-red-700 p-2 py-4 rounded-full' onClick={onClose}>Close</button>
-      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
+    <div className="flex justify-center items-center  overflow-auto my-32 relative p-8">
+      <button
+        className="text-red absolute top-9 right-9 p-2 rounded-full hover:bg-gray-800 transition"
+        onClick={onClose}
+      >
+        
+                <IoClose className=' text-3xl text-red-500' />
+      </button>
+      <div className="w-full max-w-md bg-gray-900 p-6 rounded-lg shadow-lg">
+        <h2 className="text-3xl font-semibold text-center text-white mb-6">Login</h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Email */}
           <div>
-            <label className="block text-sm font-medium mb-2">Email</label>
+            <label className="block text-sm font-medium text-white mb-2">Email</label>
             <input
               type="email"
               {...register('email', { required: 'Email is required' })}
-              className="w-full p-2 border rounded-md"
+              className="w-full p-3 border border-gray-700 rounded-md bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-600"
             />
             {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
           </div>
 
           {/* Password */}
           <div>
-            <label className="block text-sm font-medium mb-2">Password</label>
+            <label className="block text-sm font-medium text-white mb-2">Password</label>
             <input
               type="password"
               {...register('password', {
                 required: 'Password is required',
                 minLength: { value: 6, message: 'Password must be at least 6 characters long' },
               })}
-              className="w-full p-2 border rounded-md"
+              className="w-full p-3 border border-gray-700 rounded-md bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-600"
             />
             {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
           </div>
@@ -75,14 +77,14 @@ const Login = ({ onClose}) => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+            className="w-full py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
           >
             Login
           </button>
         </form>
 
         <div className="mt-4 text-center">
-          <p className="text-sm">
+          <p className="text-sm text-gray-400">
             Don’t have an account?{' '}
             <Link to="/signup" className="text-blue-500 hover:underline">
               Sign Up

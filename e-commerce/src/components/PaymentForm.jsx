@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import axios from "axios";
-import { useSelector,useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
-import { clearCartFromBackend } from "../redux/cartSlice"; // Replace with your cart clearing action
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { clearCartFromBackend } from "../redux/cartSlice";
 
 // Load Stripe with your publishable key
 const stripePromise = loadStripe("pk_test_51QXMVwLSATmnoDbEIG8x6gzCCo14muOc9aCgy9YfdGrFnc5TKqIupJLm04noPIiXKubSVN6Dyi6Es0IWQBqH6h5O001NXuWoDu");
@@ -12,17 +12,14 @@ const stripePromise = loadStripe("pk_test_51QXMVwLSATmnoDbEIG8x6gzCCo14muOc9aCgy
 const CheckoutForm = ({ totalAmount, onClose, address }) => {
   const stripe = useStripe();
   const elements = useElements();
-  // const [clientSecret, setClientSecret] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
-  const [cardholderName, setCardholderName] = useState("");
   const { token, user } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.cart);
 
-  const dispatch = useDispatch(); // Dispatch to clear cart
-  const navigate = useNavigate(); // For navigation
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleClearCart = async () => {
     try {
@@ -62,7 +59,6 @@ const CheckoutForm = ({ totalAmount, onClose, address }) => {
     }
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -73,34 +69,29 @@ const CheckoutForm = ({ totalAmount, onClose, address }) => {
       setLoading(false);
       return;
     }
-    // console.log()
-
 
     try {
       const { data } = await axios.post(
         "http://localhost:3000/api/v1/payments/create-payment-intent", 
         {
-          amount: totalAmount*100,
-          currency:'inr',
+          amount: totalAmount * 100,
+          currency: 'inr',
           orderItems: cartItems.map((item) => ({
             productId: item.product._id,
             quantity: item.quantity,
           })),
-          //  shippingAddress: address,
         }, 
         {
           headers: { Authorization: `Bearer ${token}` }
         }
       );
-      
 
       const cardElement = elements.getElement(CardElement);
       const { error, paymentIntent } = await stripe.confirmCardPayment(data.clientSecret, {
         payment_method: {
           card: cardElement,
           billing_details: {
-            name: "cardholderName",
-            // address:address
+            name: "Cardholder Name",
           },
         },
       });
@@ -109,59 +100,42 @@ const CheckoutForm = ({ totalAmount, onClose, address }) => {
         setError(error.message);
         setLoading(false);
         return;
-      } 
+      }
 
       // Payment successful, create a new order
       await createOrder(paymentIntent.id);
-
-      // await createOrder({
-      //   items: cartItems.map((item) => ({
-      //     productId: item.product._id,
-      //     quantity: item.quantity,
-      //     price: item.product.currentPrice,
-      //   })),
-      //   totalAmount: paymentIntent.amount / 100,
-      //   shippingAddress: address,
-      //   paymentId: paymentIntent.id,
-      //   userId: user.id,
-      // });
-
-
       await handleClearCart();
-        setSuccess(true);
-        // dispatch(clearCart)
-        setTimeout(() => {
-          navigate("/");
-          // onClose();
-        }, 1000);
-      } catch (err) {
-        setError("Payment failed. Please try again.");
-        console.error("Payment error:", err);
-      }
-  
-      setLoading(false);
-    };
+      setSuccess(true);
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
+    } catch (err) {
+      setError("Payment failed. Please try again.");
+      console.error("Payment error:", err);
+    }
+
+    setLoading(false);
+  };
 
   return (
-    <div>
-      {console.log(address)}
-      <h2 className="text-lg font-semibold mb-4">Complete Payment</h2>
+    <div className="bg-gray-800 text-white p-6 w-full max-w-lg mx-auto">
+      <h2 className="text-2xl font-semibold mb-4">Complete Payment</h2>
       <form onSubmit={handleSubmit}>
-        <CardElement className="border p-2 rounded mb-4" />
+        <CardElement className="border p-3 rounded mb-4 bg-gray-700" />
         {error && <p className="text-red-600">{error}</p>}
         {success && <p className="text-green-600">Payment successful!</p>}
-        <div className="flex justify-end gap-2 mt-4">
+        <div className="flex justify-end gap-4 mt-4">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition"
+            className="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={loading || !stripe || !elements}
-            className={`px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition ${
+            className={`px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition ${
               loading ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
@@ -174,8 +148,7 @@ const CheckoutForm = ({ totalAmount, onClose, address }) => {
 };
 
 const PaymentModal = ({ totalAmount, onClose, address }) => (
-  <Elements stripe={stripePromise}>
-    {/* {console.log(address)} */}
+  <Elements stripe={stripePromise}> 
     <CheckoutForm totalAmount={totalAmount} onClose={onClose} address={address} />
   </Elements>
 );
