@@ -199,7 +199,6 @@ router.post("/change-password", verifyTokenMiddleware, async (req, res) => {
   try {
     // Fetch user from the database
     const user = await User.findById(userId).select("+password");
-    console.log(user);
 
 
     if (!user) {
@@ -271,19 +270,15 @@ router.get("/", verifyTokenMiddleware, async (req, res) => {
 // GET /api/v1/orders/transactions
 // Fetch transactions for a specific user
 router.get("/transactions", verifyTokenMiddleware, async (req, res) => {
-  // console.log(req.user);
-  // console.log(2);
+
   try {
-    console.log("User ID in transaction-history route:", req.user?.id);
     const transactions = await Order.find({ user: req.user.id }) // Filter by the authenticated user
     .populate("orderItems.product", "name price image") // Populate product details
     .sort({ createdAt: -1 }); // Sort by latest orders
     
     res.status(200).json(transactions);
   } catch (error) {
-    console.log("User ID in transaction-history route:", req.user?.id);
-    // console.log(error)
-    // console.error("Error fetching transactions:", error);
+    console.error("Error fetching transactions:", error);
     res.status(500).json({ message: "Failed to fetch transactions." });
   }
 });
@@ -314,7 +309,6 @@ router.get('/:userId/cart',verifyTokenMiddleware, async (req, res) => {
       }));
   
       res.json({ cart: cartDetails });
-      // console.log({ cart: cartDetails });
     } catch (error) {
       console.error('Error fetching cart details:', error);
       res.status(500).json({ message: 'Server error' });
@@ -349,7 +343,6 @@ router.post('/:userId/cart/add', verifyTokenMiddleware, async (req, res) => {
       user.cartItems.push({ product: productId, quantity });
     }
 
-    // console.log("Updated cart items:", user.cartItems); // Debugging cart
     await user.save();
 
     res.status(200).json({
@@ -435,7 +428,6 @@ router.delete("/:userId/cart",verifyTokenMiddleware, async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    // console.log(user);
 
     // Clear the cart
     user.cartItems = [];

@@ -1,6 +1,7 @@
 import express from "express";
 import Order from "../models/orderSchema.js"; // Import Order model
 import User from "../models/userSchema.js"; // Import Order model
+import Product from "../models/productSchema.js";
 import verifyTokenMiddleware from '../middlewares/verifyTokenMiddleware.js'
 import mongoose from "mongoose";
 
@@ -14,47 +15,76 @@ const router = express.Router();
 router.post("/", verifyTokenMiddleware, async (req, res) => {
   try {
     const { items, shippingAddress, totalAmount, paymentId } = req.body;
-    // console.log(req.user);
 
     if (!items || items.length === 0) {
       return res.status(400).json({ error: "No order items provided." });
     }
 
-    // Create new order
-    const order = new Order({
-      user: req.user.id, // Retrieved from auth middleware
-      // transactionId: paymentId,
-      orderItems: items.map((item) => ({
-        product: item.product,
-        quantity: item.quantity,
-        price: item.price,
-      })),
-      totalPrice: totalAmount,
-      shippingAddress,
-      paymentInfo: {
-        method:'card',
-        id: paymentId,
-        status:'processing',
+    // Start a session for atomic operations
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+      // Create new order
+      const order = new Order({
+        user: req.user.id, // Retrieved from auth middleware
+        orderItems: items.map((item) => ({
+          product: item.product,
+          quantity: item.quantity,
+          price: item.price,
+        })),
+        totalPrice: totalAmount,
+        shippingAddress,
+        paymentInfo: {
+          method: "card",
+          id: paymentId,
+          status: "processing",
+        },
+      });
+
+      const createdOrder = await order.save({ session });
+
+      const user = await User.findById(req.user.id).session(session);
+      if (!user) {
+        throw new Error("User not found");
       }
-    });
 
-    const createdOrder = await order.save();
+      user.orders.push(createdOrder._id);
+      await user.save({ session });
 
-    const user = await User.findById(req.user.id);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      // Update product stock
+      for (const item of items) {
+        const product = await Product.findById(item.product).session(session);
+
+        if (!product) {
+          throw new Error(`Product with ID ${item.product} not found.`);
+        }
+
+        if (product.quantity < item.quantity) {
+          throw new Error(`Not enough stock for product: ${product.name}`);
+        }
+
+        product.quantity -= item.quantity;
+        await product.save({ session });
+      }
+
+      // Commit the transaction
+      await session.commitTransaction();
+      session.endSession();
+
+      res.status(201).json({ message: "Order created successfully.", order: createdOrder });
+    } catch (error) {
+      // Abort the transaction in case of any errors
+      await session.abortTransaction();
+      session.endSession();
+      throw error;
     }
-
-    user.orders.push(createdOrder._id);
-    await user.save();
-
-
-    res.status(201).json({ message: "Order created successfully.", order: createdOrder });
   } catch (error) {
     console.error("Order Creation Error:", error.message);
-    res.status(500).json({ error: "Failed to create order." });
+    res.status(500).json({ error: "Failed to create order.", details: error.message });
   }
 });
+
 
 // -------------------
 // Get All Orders for Admin
