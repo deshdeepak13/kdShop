@@ -73,7 +73,7 @@ const DropdownMenu = ({title}) => {
               Coupons
             </NavLink>
             <NavLink
-              to="/logout"
+              to="#"
               className={({ isActive }) =>
                 isActive ? 'block px-4 py-2 text-sm text-gray-700 bg-gray-200' : 'block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100' // Apply red text when active, purple otherwise
               }

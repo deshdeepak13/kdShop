@@ -5,11 +5,13 @@ import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { clearCartFromBackend } from "../redux/cartSlice";
+import { useSnackbar } from "./SnackbarProvider";
 
 // Load Stripe with your publishable key
 const stripePromise = loadStripe("pk_test_51QXMVwLSATmnoDbEIG8x6gzCCo14muOc9aCgy9YfdGrFnc5TKqIupJLm04noPIiXKubSVN6Dyi6Es0IWQBqH6h5O001NXuWoDu");
 
 const CheckoutForm = ({ totalAmount, onClose, address }) => {
+  const showSnackbar = useSnackbar();
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
@@ -109,9 +111,11 @@ const CheckoutForm = ({ totalAmount, onClose, address }) => {
       setTimeout(() => {
         navigate("/");
       }, 1000);
+      showSnackbar({message:`Order Placed Successfully !!!`,type:"payment-successful"});
     } catch (err) {
       setError("Payment failed. Please try again.");
-      console.error("Payment error:", err);
+      showSnackbar({message:`${error}`,type:"error"});
+      // console.error("Payment error:", err);
     }
 
     setLoading(false);

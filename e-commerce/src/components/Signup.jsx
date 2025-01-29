@@ -5,8 +5,14 @@ import { useDispatch } from 'react-redux';
 import { login } from '../redux/authSlice'; // Adjust path
 import axios from 'axios'; // Import axios for sending HTTP requests
 import { IoClose } from "react-icons/io5";
+import { useSnackbar } from './SnackbarProvider';
+import { useNavigate } from 'react-router-dom';
+
+
 
 const Signup = ({ onClose }) => {
+  const showSnackbar = useSnackbar();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -46,7 +52,7 @@ const Signup = ({ onClose }) => {
 
       // Dispatch login action with user info and JWT token
       const { jwtToken, email, name } = response.data;
-      dispatch(login({ user: { email, name }, token: jwtToken }));
+      dispatch(login({ user: { email, name,id }, token: jwtToken }));
 
       // Store JWT in localStorage for persistence
       localStorage.setItem('token', jwtToken);
@@ -54,6 +60,9 @@ const Signup = ({ onClose }) => {
       // Reset the form and clear photo input
       reset();
       setPhoto(null);
+      onClose();
+      navigate("/");
+      showSnackbar({message:`Welcome, ${name}!`,type:"login"})
 
       // Optionally, redirect to a different page or show success message
     } catch (error) {

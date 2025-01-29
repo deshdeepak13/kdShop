@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useSnackbar } from '../SnackbarProvider';
 
 const ProductManagement = () => {
+  const showSnackbar = useSnackbar();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -80,9 +82,11 @@ const ProductManagement = () => {
         setProducts(products.map((product) => (product._id === selectedProduct._id ? { ...updatedProduct, _id: selectedProduct._id } : product)));
         setIsEditModalOpen(false);
         setSelectedProduct(null);
+        showSnackbar({message:`Product updated!`,type:"success"});
       }
     } catch (err) {
       console.error(err);
+      showSnackbar({message:`Failed to update product!`,type:"error"});
       setError('Failed to update product');
     }
   };
@@ -108,19 +112,23 @@ const ProductManagement = () => {
         setProducts([...products, response.data]);
         setIsAddModalOpen(false);
         setNewProduct({ name: '', images: [], description: '', MRP: '', discount: '', stock: '', category: '' });
+        showSnackbar({message:`Product added to inventory!`,type:"success"});
       }
     } catch (err) {
       console.error(err);
+      showSnackbar({message:`Failed to add product!`,type:"success"});
       setError('Failed to add product');
     }
   };
-
+  
   const deleteProduct = async (id) => {
     try {
       await axios.delete(`http://localhost:3000/api/v1/admin/product/${id}`);
       setProducts(products.filter((product) => product._id !== id));
+      showSnackbar({message:`Product removed from inventory!`,type:"deleted"});
     } catch (err) { 
       console.log(err)
+      showSnackbar({message:`Failed to delted product!`,type:"error"});
       setError('Failed to delete product');
     }
   };

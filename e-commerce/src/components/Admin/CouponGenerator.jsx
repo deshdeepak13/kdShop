@@ -30,11 +30,6 @@ const CouponGenerator = () => {
 
     setLoading(true);
     setMessage(null);
-    // console.log({
-    //     couponCode,
-    //     discount: parseFloat(discount),
-    //     expiryDate,
-    //   });
 
     try {
       const response = await axios.post(
@@ -46,8 +41,7 @@ const CouponGenerator = () => {
         },
         {
           headers: {
-            // "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem('admintoken')}`, // Replace with actual token
+            Authorization: `Bearer ${localStorage.getItem("admintoken")}`, // Replace with actual token
           },
         }
       );
@@ -62,8 +56,7 @@ const CouponGenerator = () => {
       console.error(error);
       setMessage({
         type: "error",
-        text:
-          error.response?.data?.message || "Failed to create the coupon. Try again.",
+        text: error.response?.data?.message || "Failed to create the coupon. Try again.",
       });
     } finally {
       setLoading(false);
@@ -71,15 +64,15 @@ const CouponGenerator = () => {
   };
 
   return (
-    <div className="p-6 max-w-xl mx-auto bg-white rounded-2xl shadow-lg">
+    <div className="p-6 max-w-xl mx-auto bg-gray-800 text-white rounded-2xl shadow-lg">
       <h2 className="text-2xl font-bold mb-4">Generate Coupon</h2>
 
       {message && (
         <div
-          className={`mb-4 p-2 rounded ${
+          className={`mb-4 p-2 rounded text-sm ${
             message.type === "success"
-              ? "bg-green-100 text-green-800"
-              : "bg-red-100 text-red-800"
+              ? "bg-green-500 text-white"
+              : "bg-red-500 text-white"
           }`}
         >
           {message.text}
@@ -99,12 +92,12 @@ const CouponGenerator = () => {
               value={couponCode}
               onChange={(e) => setCouponCode(e.target.value)}
               placeholder="Enter or generate a code"
-              className="border rounded-l w-full p-2 focus:outline-none focus:ring focus:border-blue-300"
+              className="border rounded-l w-full p-2 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <button
               type="button"
               onClick={generateRandomCode}
-              className="px-4 py-2 bg-blue-500 text-white rounded-r hover:bg-blue-600"
+              className="px-4 py-2 bg-blue-600 text-white rounded-r hover:bg-blue-700"
             >
               Generate
             </button>
@@ -122,7 +115,7 @@ const CouponGenerator = () => {
             value={discount}
             onChange={(e) => setDiscount(e.target.value)}
             placeholder="Enter discount (e.g., 10 for 10%)"
-            className="border rounded w-full p-2 focus:outline-none focus:ring focus:border-blue-300"
+            className="border rounded w-full p-2 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
@@ -136,7 +129,7 @@ const CouponGenerator = () => {
             id="expiryDate"
             value={expiryDate}
             onChange={(e) => setExpiryDate(e.target.value)}
-            className="border rounded w-full p-2 focus:outline-none focus:ring focus:border-blue-300"
+            className="border rounded w-full p-2 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
@@ -145,7 +138,7 @@ const CouponGenerator = () => {
           type="submit"
           disabled={loading}
           className={`w-full py-2 text-white font-bold rounded ${
-            loading ? "bg-gray-400" : "bg-green-500 hover:bg-green-600"
+            loading ? "bg-gray-600" : "bg-green-600 hover:bg-green-700"
           }`}
         >
           {loading ? "Generating..." : "Create Coupon"}

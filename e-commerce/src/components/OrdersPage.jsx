@@ -40,9 +40,7 @@ const MyOrders = () => {
 
   const filteredOrders = orders
     .filter((order) =>
-      order.orderItems.some((item) =>
-        item.productName?.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+      order._id.toLowerCase().includes(searchTerm.toLowerCase()) // Filter by order ID
     )
     .filter((order) => (statusFilter === "All" ? true : order.status === statusFilter))
     .filter((order) => {
@@ -72,66 +70,66 @@ const MyOrders = () => {
   return (
     <div className="flex bg-gray-900 text-white h-screen">
       {/* Filters */}
-      <aside className="w-1/4 p-4 bg-gray-800 h-full">
-        <h2 className="text-lg font-semibold mb-4">Filters</h2>
+      <aside className="w-full md:w-1/4 p-6 bg-gray-900 shadow-lg rounded-lg border border-gray-700 overflow-hidden">
+        <h2 className="text-2xl font-bold mb-6 text-gray-100">Filters</h2>
+
+        {/* Search Bar */}
+        <div className="mb-6">
+          <label htmlFor="search" className="block font-medium mb-2 text-gray-300">
+            Search by Order ID:
+          </label>
+          <input
+            type="text"
+            id="search"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search by order ID"
+            className="w-full p-3 bg-gray-800 text-gray-100 border border-gray-700 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
+          />
+        </div>
 
         {/* Status Filter */}
-        <div className="mb-4">
-          <h3 className="text-md font-semibold">Filter by Status</h3>
-          <ul className="space-y-2 mt-2">
+        <div className="mb-6">
+          <label htmlFor="status" className="block font-medium mb-2 text-gray-300">
+            Filter by Status:
+          </label>
+          <select
+            id="status"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="w-full p-3 bg-gray-800 text-gray-100 border border-gray-700 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
+          >
             {["All", "Pending", "Processing", "Shipped", "Delivered", "Canceled"].map((status) => (
-              <li key={status}>
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    name="status"
-                    value={status}
-                    checked={statusFilter === status}
-                    onChange={(e) => setStatusFilter(e.target.value)}
-                    className="mr-2"
-                  />
-                  {status}
-                </label>
-              </li>
+              <option key={status} value={status}>
+                {status}
+              </option>
             ))}
-          </ul>
+          </select>
         </div>
 
         {/* Date Filter */}
-        <div className="mb-4">
-          <h3 className="text-md font-semibold">Filter by Ordered Date</h3>
-          <ul className="space-y-2 mt-2">
+        <div className="mb-6">
+          <label htmlFor="date" className="block font-medium mb-2 text-gray-300">
+            Filter by Ordered Date:
+          </label>
+          <select
+            id="date"
+            value={dateFilter}
+            onChange={(e) => setDateFilter(e.target.value)}
+            className="w-full p-3 bg-gray-800 text-gray-100 border border-gray-700 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
+          >
             {["All", "Last 30 Days", "Last Year", "2022", "2021", "2019", "Older"].map((date) => (
-              <li key={date}>
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    name="date"
-                    value={date}
-                    checked={dateFilter === date}
-                    onChange={(e) => setDateFilter(e.target.value)}
-                    className="mr-2"
-                  />
-                  {date}
-                </label>
-              </li>
+              <option key={date} value={date}>
+                {date}
+              </option>
             ))}
-          </ul>
+          </select>
         </div>
       </aside>
 
       {/* Orders */}
       <main className="w-3/4 p-4 min-h-[100vh] overflow-y-auto">
-        <div className="mb-4">
-          <input
-            type="text"
-            placeholder="Search orders..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full p-2 border rounded bg-gray-700 text-white"
-          />
-        </div>
-
+        
         {/* Order Cards */}
         {filteredOrders.length === 0 ? (
           <p>No orders found.</p>

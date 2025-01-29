@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { addToCart, updateCartItem, removeFromCart } from '../services/cartService';
+// import { useSnackbar } from '../components/SnackbarProvider';
 
 const initialState = {
   cartItems: [],
@@ -80,6 +81,7 @@ const cartSlice = createSlice({
     removeCoupon: (state) => {
       state.coupon = null;
       state.discount = 0;
+      // showSnackbar({message:`Coupon removed!`,type:"notify"})
     },
     // Clear the cart
     clearCart: (state) => {
@@ -106,7 +108,7 @@ export const fetchCartItems = (token, userId) => async (dispatch) => {
     dispatch(setCartItems(response.data.cart));
   } catch (error) {
     dispatch(setError(error.message));
-  } finally {
+  } finally { 
     dispatch(setLoading(false));
   }
 };
@@ -157,7 +159,8 @@ export const removeItemFromCart = (token, userId, productId) => async (dispatch,
     dispatch(rollbackRemoveItem(itemToRemove)); // Rollback on failure
   }
 };// Apply coupon by dispatching applyCoupon with coupon details
-export const applyCouponToCart = (token, userId, couponCode) => async (dispatch) => {
+export const applyCouponToCart = (token, userId, couponCode,showSnackbar) => async (dispatch) => {
+  // const showSnackbar = useSnackbar();
   try {
     // Example API call to validate coupon and get discount
     const response = await axios.post(
@@ -165,22 +168,30 @@ export const applyCouponToCart = (token, userId, couponCode) => async (dispatch)
       { couponCode },
       { headers: { Authorization: `Bearer ${token}` } }
     );
-    console.log(response.data);
+    // console.log(response.data);
     
     if (response.data.isValid) {
       dispatch(applyCoupon({
         coupon: response.data.couponCode,
         discount: response.data.discountPercentage,  // Example: 10% discount
       }));
+      showSnackbar({message:`Coupon "${couponCode}" applied successfully!`,type:"celebration"})
     } else {
-      dispatch(setError('Invalid coupon'));
+      // dispatch(setError('Invalid coupon'));
+      showSnackbar({message:`"${couponCode} is invalid Coupon" `,type:"error"})
     }
   } catch (error) {
     // console.log(error)
+    showSnackbar({message:`"${couponCode} is invalid Coupon" `,type:"error"})
     console.log(error.toJSON());
 
-    dispatch(setError(error.message));  
+    // dispatch(setError(error.message));  
   }
+};
+
+export const removeCouponFromCart = (showSnackbar) => async (dispatch) => {
+  dispatch(removeCoupon());
+  showSnackbar({ message: "Coupon removed!", type: "notify" });
 };
 
 export const clearCartFromBackend = (token, userId) => async (dispatch) => {

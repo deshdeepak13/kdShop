@@ -13,7 +13,7 @@ const Navbar = ({ openLogin, openSignup }) => {
           {/* Logo */}
           <div className="logo font-bold text-2xl text-white tracking-wide">
             <Link to="/" className="hover:text-purple-300 transition duration-300">
-              pottyShop
+              {"<ddShop"} <span className='text-purple-500'>{"/>"}</span>
             </Link>
           </div>
 

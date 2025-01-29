@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { applyCouponToCart, removeCoupon } from '../redux/cartSlice';
+import { applyCouponToCart, removeCouponFromCart } from '../redux/cartSlice';
 // import { useSelector, useDispatch } from "react-redux";
+import { useSnackbar } from './SnackbarProvider';
 
 const CouponForm = ({ disabled }) => {
+  const showSnackbar = useSnackbar();
   const dispatch = useDispatch();
   const { coupon, couponError } = useSelector((state) => state.cart);
   const [couponCode, setCouponCode] = useState('');
@@ -11,12 +13,12 @@ const CouponForm = ({ disabled }) => {
 
   const handleApplyCoupon = () => {
     if (couponCode) {
-      dispatch(applyCouponToCart(token, user.id, couponCode)); // Pass token and userId if needed
+      dispatch(applyCouponToCart(token, user.id, couponCode,showSnackbar)); // Pass token and userId if needed
     }
   };
 
   const handleRemoveCoupon = () => {
-    dispatch(removeCoupon());
+    dispatch(removeCouponFromCart(showSnackbar));
     setCouponCode('');
   };
 
