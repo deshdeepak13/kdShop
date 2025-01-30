@@ -16,7 +16,7 @@ import {
 export const addToCart = async (token, userId, productId, quantity) => {
   try {
     const response = await axios.post(
-      `http://localhost:3000/api/v1/user/${userId}/cart/add/`,
+      `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/user/${userId}/cart/add/`,
       { productId, quantity },
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -76,7 +76,7 @@ export const removeItemFromCart = (token, userId, productId) => async (dispatch)
 export const updateCartItem = async (token, userId, productId, quantity) => {
   try {
     const response = await axios.put(
-      `http://localhost:3000/api/v1/user/${userId}/cart/update`,
+      `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/user/${userId}/cart/update`,
       { productId, quantity },
       {
         headers: {
@@ -95,7 +95,7 @@ export const updateCartItem = async (token, userId, productId, quantity) => {
 export const removeFromCart = async (token, userId, productId) => {
   try {
     const response = await axios.delete(
-      `http://localhost:3000/api/v1/user/${userId}/cart/remove/${productId}`,
+      `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/user/${userId}/cart/remove/${productId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

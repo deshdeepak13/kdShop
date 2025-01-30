@@ -41,7 +41,7 @@ const Signup = ({ onClose , openLogin }) => {
       }
 
       // Send a POST request to the backend (adjust URL as per your API route)
-      const response = await axios.post('http://localhost:3000/api/v1/user/signup', formData, {
+      const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/user/signup`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data', // Required for file upload
         },

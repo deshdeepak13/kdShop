@@ -42,7 +42,7 @@ const CheckoutForm = ({ totalAmount, onClose, address }) => {
       }));
 
       const { data } = await axios.post(
-        "http://localhost:3000/api/v1/orders",
+        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/orders`,
         {
           items: orderItems,
           shippingAddress: address,
@@ -76,7 +76,7 @@ const CheckoutForm = ({ totalAmount, onClose, address }) => {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:3000/api/v1/payments/create-payment-intent", 
+        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/payments/create-payment-intent`, 
         {
           amount: totalAmount * 100,
           currency: 'inr',

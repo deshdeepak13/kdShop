@@ -35,7 +35,7 @@ const MyOrders = () => {
     const fetchOrders = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get("http://localhost:3000/api/v1/orders/my-orders", {
+        const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/orders/my-orders`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -273,7 +273,7 @@ const MyOrders = () => {
                       {order.orderItems.map((item) => (
                         <div key={item.productId} className="flex items-start gap-4 p-3 bg-gray-700 rounded-lg">
                           <img
-                            src={`http://localhost:3000/public/images/${item.imageUrl || "default-product.jpg"}`}
+                            src={`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/public/images/${item.imageUrl || "default-product.jpg"}`}
                             alt={item.productName}
                             className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
                           />

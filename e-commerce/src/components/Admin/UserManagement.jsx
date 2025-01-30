@@ -9,7 +9,7 @@ const UserManagement = () => {
   const fetchUsers = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/api/v1/admin/users",
+        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/admin/users`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("admintoken")}`, // Add the token for authorization
@@ -27,7 +27,7 @@ const UserManagement = () => {
   const deleteUser = async (id) => {
     try {
       const response = await axios.delete(
-        `http://localhost:3000/api/v1/admin/users/${id}`,
+        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/admin/users/${id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("admintoken")}`, // Add the token for authorization

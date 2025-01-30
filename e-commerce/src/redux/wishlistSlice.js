@@ -47,7 +47,7 @@ export const fetchWishlistItems = (token, userId) => async (dispatch) => {
   try {
     dispatch(setLoading(true));
     const response = await axios.get(
-      `http://localhost:3000/api/v1/wishlist/${userId}`,
+      `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/wishlist/${userId}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -65,7 +65,7 @@ export const fetchWishlistItems = (token, userId) => async (dispatch) => {
 export const addToWishlist = (token, userId, product) => async (dispatch) => {
   try {
     const response = await axios.post(
-      `http://localhost:3000/api/v1/wishlist/${userId}/add`,
+      `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/wishlist/${userId}/add`,
       { productId: product.id },
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -80,7 +80,7 @@ export const addToWishlist = (token, userId, product) => async (dispatch) => {
 export const removeFromWishlist = (token, userId, productId) => async (dispatch) => {
   try {
     await axios.delete(
-      `http://localhost:3000/api/v1/wishlist/${userId}/remove/${productId}`,
+      `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/wishlist/${userId}/remove/${productId}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }

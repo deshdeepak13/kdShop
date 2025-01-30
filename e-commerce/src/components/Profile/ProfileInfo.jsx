@@ -15,7 +15,7 @@ const ProfileInformation = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/v1/user", {
+        const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/user`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setProfileData(response.data);
@@ -54,7 +54,7 @@ const ProfileInformation = () => {
               </div>
             ) : (
               <img
-                src={`http://localhost:3000/uploads/${profileData?.photo || "default-profile.jpg"}`}
+                src={`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/uploads/${profileData?.photo || "default-profile.jpg"}`}
                 alt="Profile"
                 className="w-full h-full object-cover transition-transform group-hover:scale-105"
                 onError={handleImageError}

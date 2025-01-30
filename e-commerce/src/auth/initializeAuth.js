@@ -7,7 +7,7 @@ const initializeAuth = (dispatch) => {
   const token = localStorage.getItem('token');
   
   if (token) {
-    fetch('http://localhost:3000/api/v1/user/verifyToken', {
+    fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/user/verifyToken`, {
       method: 'POST',
       headers: { 
         'Authorization': `Bearer ${token}`,

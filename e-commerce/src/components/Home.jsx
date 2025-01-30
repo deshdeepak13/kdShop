@@ -14,7 +14,7 @@ const Home = () => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/v1/products"
+          `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/products`
         );
         setProducts(response.data); // Assuming the response has the array directly
       } catch (error) {
@@ -76,7 +76,7 @@ const Home = () => {
                 price={product.currentPrice}
                 originalPrice={product.MRP}
                 discount={product.discount}
-                imageUrl={`http://localhost:3000/public/images/${
+                imageUrl={`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/public/images/${
                   product.imageUrl?.[0] || "default-product.jpg"
                 }`}
                 stock={product.stock}

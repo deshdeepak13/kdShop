@@ -102,7 +102,7 @@ export const {
 export const fetchCartItems = (token, userId) => async (dispatch) => {
   try {
     dispatch(setLoading(true));
-    const response = await axios.get(`http://localhost:3000/api/v1/user/${userId}/cart`, {
+    const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/user/${userId}/cart`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     dispatch(setCartItems(response.data.cart));
@@ -164,7 +164,7 @@ export const applyCouponToCart = (token, userId, couponCode,addSnackbar) => asyn
   try {
     // Example API call to validate coupon and get discount
     const response = await axios.post(
-      'http://localhost:3000/api/v1/coupon/validate',
+      `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/coupon/validate`,
       { couponCode },
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -199,7 +199,7 @@ export const clearCartFromBackend = (token, userId) => async (dispatch) => {
     dispatch(setLoading(true));
 
     // API call to clear cart in backend
-    await axios.delete(`http://localhost:3000/api/v1/user/${userId}/cart`, {
+    await axios.delete(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/user/${userId}/cart`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     console.log(userId);

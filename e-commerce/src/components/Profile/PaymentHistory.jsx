@@ -15,7 +15,7 @@ const PaymentHistory = () => {
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        const { data } = await axios.get("http://localhost:3000/api/v1/user/transactions", {
+        const { data } = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/user/transactions`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setPayments(data);

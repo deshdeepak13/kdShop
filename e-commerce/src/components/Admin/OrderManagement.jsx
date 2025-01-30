@@ -8,7 +8,7 @@ const OrderManagement = () => {
   // Fetch orders from the backend
   const fetchOrders = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/api/v1/admin/orders', {
+      const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/admin/orders`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('admintoken')}`,
         },
@@ -26,7 +26,7 @@ const OrderManagement = () => {
   const changeStatus = async (id, status) => {
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/v1/admin/order/${id}`,
+        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/admin/order/${id}`,
         { status },
         {
           headers: {  

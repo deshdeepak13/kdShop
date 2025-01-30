@@ -23,7 +23,7 @@ const Login = ({ onClose, openSignup }) => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post('http://localhost:3000/api/v1/user/login', data);
+      const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/user/login`, data);
       const { jwtToken, email, name,id } = response.data;
 
       localStorage.setItem('token', jwtToken); 

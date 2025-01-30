@@ -18,7 +18,7 @@ const CouponsPage = () => {
   useEffect(() => {
     const fetchCoupons = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/v1/coupon", {
+        const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/coupon`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setCoupons(response.data.coupons);

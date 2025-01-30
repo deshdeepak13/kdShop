@@ -43,7 +43,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/v1/admin/dashboard", {
+        const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/admin/dashboard`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("admintoken")}`,
           },

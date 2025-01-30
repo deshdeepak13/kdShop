@@ -23,7 +23,7 @@ const ProductManagement = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/api/v1/admin/products", {
+      const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/admin/products`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('admintoken')}`
         }
@@ -72,7 +72,7 @@ const ProductManagement = () => {
     }
 
     try {
-      const response = await axios.put(`http://localhost:3000/api/v1/admin/product/${selectedProduct._id}`, updatedProduct, {
+      const response = await axios.put(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/admin/product/${selectedProduct._id}`, updatedProduct, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('admintoken')}`
         }
@@ -104,7 +104,7 @@ const ProductManagement = () => {
     formData.append('category', newProduct.category);
 
     try {
-      const response = await axios.post('http://localhost:3000/api/v1/admin/products', formData, {
+      const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/admin/products`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
@@ -123,7 +123,7 @@ const ProductManagement = () => {
   
   const deleteProduct = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/api/v1/admin/product/${id}`);
+      await axios.delete(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/admin/product/${id}`);
       setProducts(products.filter((product) => product._id !== id));
       addSnackbar({message:`Product removed from inventory!`,type:"deleted"});
     } catch (err) { 
@@ -171,7 +171,7 @@ const ProductManagement = () => {
                 {product.imageUrl?.map((url, index) => (
                   <img
                     key={index}
-                    src={`http://localhost:3000/public/images/${url}`}
+                    src={`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/public/images/${url}`}
                     alt={product.name}
                     className="w-20 h-20 object-contain mr-2"
                   />

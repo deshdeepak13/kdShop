@@ -34,7 +34,7 @@ const ChangePassword = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        "http://localhost:3000/api/v1/user/change-password",
+        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/user/change-password`,
         formData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
