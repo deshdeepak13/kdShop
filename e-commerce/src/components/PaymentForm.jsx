@@ -7,8 +7,10 @@ import { useNavigate } from "react-router-dom";
 import { clearCartFromBackend } from "../redux/cartSlice";
 import { useSnackbar } from "./SnackbarProvider";
 
+
 // Load Stripe with your publishable key
-const stripePromise = loadStripe("pk_test_51QXMVwLSATmnoDbEIG8x6gzCCo14muOc9aCgy9YfdGrFnc5TKqIupJLm04noPIiXKubSVN6Dyi6Es0IWQBqH6h5O001NXuWoDu");
+const stripePublicKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
+const stripePromise = loadStripe(stripePublicKey);
 
 const CheckoutForm = ({ totalAmount, onClose, address }) => {
   const showSnackbar = useSnackbar();
