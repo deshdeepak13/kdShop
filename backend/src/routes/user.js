@@ -53,7 +53,7 @@ router.post('/signup', upload.single('photo'), [
     }
 
     // Hash the password before saving
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, process.env.BCRYPT_HASH);
 
     // Create a new user using the User model
     const newUser = new User({
@@ -70,7 +70,7 @@ router.post('/signup', upload.single('photo'), [
 
     const jwtToken = jwt.sign(
       { email: email,name:name,id: savedUser._id},
-      "secret-123",
+      process.env.JWT_SECRET,
       { expiresIn: '24h' }
   )
 
@@ -125,7 +125,7 @@ router.post('/login', [
     // Create a JWT token
     const jwtToken = jwt.sign(
       { email: user.email,name:user.name, id: user._id},
-      "secret-123",
+      process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
 
@@ -159,7 +159,7 @@ router.post('/verifyToken', async (req, res) => {
   }
 
   try {
-    const decoded = jwt.verify(token, 'secret-123'); // Replace with your secret key
+    const decoded = jwt.verify(token, process.env.JWT_SECRET); // Replace with your secret key
     const user = await User.findOne({ email: decoded.email });
 
     if (!user) {
@@ -213,7 +213,7 @@ router.post("/change-password", verifyTokenMiddleware, async (req, res) => {
     }
 
     // Hash the new password
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const hashedPassword = await bcrypt.hash(newPassword, process.env.BCRYT_HASH);
 
     // Update user's password
     user.password = hashedPassword;

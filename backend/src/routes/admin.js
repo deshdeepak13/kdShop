@@ -48,7 +48,7 @@ router.post(
       // Generate JWT token
       const jwtToken = jwt.sign(
         { email: admin.email, name: admin.name, id: admin._id,role:"admin" },
-        "secret-123", // Replace with your secret key
+        process.env.JWT_SECRET, // Replace with your secret key
         { expiresIn: "24h" }
       );
 

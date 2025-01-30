@@ -8,9 +8,9 @@ import { IoClose } from "react-icons/io5";
 import { Eye, EyeOff } from "lucide-react"; // Import Eye Icons
 import { useSnackbar } from "../components/SnackbarProvider";
 
-const Login = ({ onClose }) => {
+const Login = ({ onClose, openSignup }) => {
   const dispatch = useDispatch();
-  const showSnackbar = useSnackbar();
+  const addSnackbar = useSnackbar();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false); // State for password toggle
 
@@ -29,10 +29,10 @@ const Login = ({ onClose }) => {
       localStorage.setItem('token', jwtToken); 
       dispatch(login({ user: { email, name,id }, token: jwtToken }));
       
-      reset();
+      reset(); 
       onClose();
+      addSnackbar({ message: `Welcome back, ${name}!`, type: "login" });
       navigate("/");
-      showSnackbar({ message: `Welcome back, ${name}!`, type: "login" });
     } catch (error) {
       console.error('Login failed:', error.response ? error.response.data : error.message);
     }
@@ -97,9 +97,10 @@ const Login = ({ onClose }) => {
         <div className="mt-4 text-center">
           <p className="text-sm text-gray-400">
             Don’t have an account?{' '}
-            <Link to="/signup" className="text-blue-500 hover:underline">
-              Sign Up
-            </Link>
+            {/* <Link to="/signup" className="text-blue-500 hover:underline"> */}
+            <span className="text-blue-500 hover:underline cursor-pointer" onClick={openSignup}>Sign Up</span>
+              
+            {/* </Link> */}
           </p>
         </div>
       </div>

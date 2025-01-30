@@ -31,10 +31,24 @@ const App = () => {
   }, [dispatch]);
 
   // Handlers for modals
-  const openLogin = () => setIsLoginOpen(true);
-  const closeLogin = () => setIsLoginOpen(false);
-  const openSignup = () => setIsSignupOpen(true);
-  const closeSignup = () => setIsSignupOpen(false);
+const openLogin = () => {
+  setIsSignupOpen(false);
+  setIsLoginOpen(true);
+};
+
+const closeLogin = () => {
+  setIsLoginOpen(false);
+};
+
+const openSignup = () => {
+  setIsLoginOpen(false);
+  setIsSignupOpen(true);
+};
+
+const closeSignup = () => {
+  setIsSignupOpen(false);
+};
+
 
   // List of routes where Navbar should not be displayed
   const excludeNavbarRoutes = ['/admin'];
@@ -127,12 +141,12 @@ const App = () => {
 
       {/* Login Modal */}
       <Modal isOpen={isLoginOpen} onClose={closeLogin}>
-        <Login onClose={closeLogin} />
+      <Login onClose={closeLogin} openSignup={openSignup} />
       </Modal>
 
       {/* Signup Modal */}
       <Modal isOpen={isSignupOpen} onClose={closeSignup}>
-        <Signup onClose={closeSignup} />
+      <Signup onClose={closeSignup} openLogin={openLogin} />
       </Modal>
       </div>
     </>

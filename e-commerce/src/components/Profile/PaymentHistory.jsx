@@ -1,123 +1,135 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios"; // You can use axios or fetch for API calls
+import axios from "axios";
 import { useSelector } from "react-redux";
+import { FiAlertCircle, FiCheckCircle, FiXCircle, FiClock, FiInfo } from "react-icons/fi";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const PaymentHistory = () => {
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { user, token } = useSelector((state) => state.auth); // User data from Redux store
-  const [expandedPaymentId, setExpandedPaymentId] = useState(null); // Track expanded payment
+  const { token } = useSelector((state) => state.auth);
+  const [expandedPaymentId, setExpandedPaymentId] = useState(null);
 
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:3000/api/v1/user/transactions`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`, // Add token in the Authorization header
-            },
-          }
-        );
-        setPayments(response.data);
-        // console.log(response.data);
+        const { data } = await axios.get("http://localhost:3000/api/v1/user/transactions", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setPayments(data);
       } catch (err) {
-        setError("Failed to fetch transaction history.");
+        setError("Failed to load payment history. Please try again later.");
       } finally {
         setLoading(false);
       }
     };
 
     fetchPayments();
-  }, [user.id, token]);
+  }, [token]);
 
-  const handleToggleExpand = (paymentId) => {
-    if (expandedPaymentId === paymentId) {
-      setExpandedPaymentId(null); // Close if already expanded
-    } else {
-      setExpandedPaymentId(paymentId); // Expand the clicked payment
-    }
+  const getStatusDetails = (status) => {
+    const statusConfig = {
+      pending: { color: "text-yellow-500", icon: <FiClock />, label: "Pending" },
+      failed: { color: "text-red-500", icon: <FiXCircle />, label: "Failed" },
+      success: { color: "text-green-600", icon: <FiCheckCircle />, label: "Success" },
+      processing: { color: "text-blue-500", icon: <FiInfo />, label: "Processing" },
+      shipped: { color: "text-indigo-500", icon: <FiInfo />, label: "Shipped" },
+      delivered: { color: "text-teal-500", icon: <FiCheckCircle />, label: "Delivered" },
+      canceled: { color: "text-gray-500", icon: <FiXCircle />, label: "Canceled" }
+    };
+    return statusConfig[status] || { color: "text-gray-400", icon: <FiInfo />, label: "Unknown" };
   };
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "pending":
-        return "text-yellow-500"; // Yellow for pending
-      case "failed":
-        return "text-red-500"; // Red for failed
-      case "success":
-        return "text-green-600"; // Green for success
-      case "processing":
-        return "text-blue-500"; // Blue for processing
-      case "shipped":
-        return "text-indigo-500"; // Indigo for shipped
-      case "delivered":
-        return "text-teal-500"; // Teal for delivered
-      case "canceled":
-        return "text-gray-500"; // Gray for canceled
-      default:
-        return "text-black"; // Default color
-    }
-  };
-
-  if (loading) {
-    return <div className="text-center text-white p-6">Loading...</div>;
-  }
 
   if (error) {
-    return <div className="text-center text-red-500 p-6">{error}</div>;
+    return (
+      <div className="max-w-2xl mx-auto p-6 bg-red-900/20 rounded-xl text-red-400 flex items-center gap-3">
+        <FiAlertCircle className="flex-shrink-0" />
+        <span>{error}</span>
+      </div>
+    );
   }
 
   return (
-    <div className="p-6 mx-auto text-white">
-      <h2 className="text-2xl font-semibold mb-6">Payment History</h2>
-      <div className="space-y-4">
-        {payments.map((payment) => (
-          <div
-            key={payment._id}
-            className="flex flex-col p-4 bg-gray-700 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
-          >
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-lg font-semibold">
-                Order #{payment._id}
-              </span>
-              <span className="text-sm text-gray-400">
-                {new Date(payment.createdAt).toLocaleDateString()}
-              </span>
+    <div className="max-w-4xl mx-auto p-4 md:p-6">
+      <h2 className="text-2xl font-bold text-white mb-6">Payment History</h2>
+      
+      <div className="space-y-3">
+        {loading ? (
+          [...Array(3)].map((_, i) => (
+            <div key={i} className="p-4 bg-gray-800 rounded-xl">
+              <Skeleton height={80} baseColor="#1f2937" highlightColor="#374151" />
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-xl font-bold text-green-400">
-                ₹{payment.totalPrice}
-              </span>
-              <button
-                className="px-4 py-1 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors duration-200"
-                onClick={() => handleToggleExpand(payment._id)} // Toggle expand/collapse
-              >
-                {expandedPaymentId === payment._id ? "Hide Details" : "View Details"}
-              </button>
-            </div>
-
-            {/* Payment Details Section (only visible when expanded) */}
-            {expandedPaymentId === payment._id && (
-              <div className="mt-4 p-4 bg-gray-600 rounded-md">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="font-semibold">Payment Method:</span>
-                  <span>{payment.paymentMethod}</span>
-                </div>
-                <div className="flex justify-between items-center mb-2">
-                  <span className="font-semibold">Payment Status:</span>
-                  <span className={`${getStatusColor(payment.status)}`}>
-                    {payment.status}
-                  </span>
-                </div>
-              </div>
-            )}
+          ))
+        ) : payments.length === 0 ? (
+          <div className="p-6 bg-gray-800 rounded-xl text-gray-400 text-center">
+            No payment history found
           </div>
-        ))}
+        ) : (
+          payments.map((payment) => (
+            <div
+              key={payment._id}
+              className="bg-gray-800 rounded-xl p-4 shadow-lg transition-all"
+            >
+              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="text-sm text-gray-400">
+                      {new Date(payment.createdAt).toLocaleDateString()}
+                    </span>
+                    <span className="text-xs bg-gray-700 text-gray-300 px-2 py-1 rounded-full">
+                      #{payment._id}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-xl font-semibold text-green-400">
+                      ₹{payment.totalPrice}
+                    </span>
+                    <div className={`flex items-center gap-1 ${getStatusDetails(payment.status).color}`}>
+                      {getStatusDetails(payment.status).icon}
+                      <span className="text-sm">{getStatusDetails(payment.status).label}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setExpandedPaymentId(p => p === payment._id ? null : payment._id)}
+                  className="w-full md:w-auto px-4 py-2 text-sm bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors flex items-center gap-2"
+                >
+                  <FiInfo />
+                  {expandedPaymentId === payment._id ? "Less Details" : "More Details"}
+                </button>
+              </div>
+
+              {expandedPaymentId === payment._id && (
+                <div className="mt-4 pt-4 border-t border-gray-700 space-y-3">
+                  <DetailItem label="Payment Method" value={payment.paymentMethod} />
+                  <DetailItem label="Transaction ID" value={payment.transactionId || "N/A"} />
+                  <DetailItem label="Items" value={payment.items?.length || 0} />
+                  <DetailItem 
+                    label="Payment Status" 
+                    value={
+                      <span className={getStatusDetails(payment.status).color}>
+                        {getStatusDetails(payment.status).label}
+                      </span>
+                    } 
+                  />
+                </div>
+              )}
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
 };
+
+const DetailItem = ({ label, value }) => (
+  <div className="flex flex-col sm:flex-row justify-between gap-2 p-3 bg-gray-700/30 rounded-lg">
+    <span className="text-sm text-gray-400">{label}</span>
+    <span className="text-sm text-white font-medium">{value}</span>
+  </div>
+);
 
 export default PaymentHistory;

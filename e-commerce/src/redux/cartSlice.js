@@ -81,7 +81,7 @@ const cartSlice = createSlice({
     removeCoupon: (state) => {
       state.coupon = null;
       state.discount = 0;
-      // showSnackbar({message:`Coupon removed!`,type:"notify"})
+      // addSnackbar({message:`Coupon removed!`,type:"notify"})
     },
     // Clear the cart
     clearCart: (state) => {
@@ -159,8 +159,8 @@ export const removeItemFromCart = (token, userId, productId) => async (dispatch,
     dispatch(rollbackRemoveItem(itemToRemove)); // Rollback on failure
   }
 };// Apply coupon by dispatching applyCoupon with coupon details
-export const applyCouponToCart = (token, userId, couponCode,showSnackbar) => async (dispatch) => {
-  // const showSnackbar = useSnackbar();
+export const applyCouponToCart = (token, userId, couponCode,addSnackbar) => async (dispatch) => {
+  // const addSnackbar = useSnackbar();
   try {
     // Example API call to validate coupon and get discount
     const response = await axios.post(
@@ -175,23 +175,23 @@ export const applyCouponToCart = (token, userId, couponCode,showSnackbar) => asy
         coupon: response.data.couponCode,
         discount: response.data.discountPercentage,  // Example: 10% discount
       }));
-      showSnackbar({message:`Coupon "${couponCode}" applied successfully!`,type:"celebration"})
+      addSnackbar({message:`Coupon "${couponCode}" applied successfully!`,type:"celebration"})
     } else {
       // dispatch(setError('Invalid coupon'));
-      showSnackbar({message:`"${couponCode} is invalid Coupon" `,type:"error"})
+      addSnackbar({message:`"${couponCode} is invalid Coupon" `,type:"error"})
     }
   } catch (error) {
     // console.log(error)
-    showSnackbar({message:`"${couponCode} is invalid Coupon" `,type:"error"})
+    addSnackbar({message:`"${couponCode} is invalid Coupon" `,type:"error"})
     console.log(error.toJSON());
 
     // dispatch(setError(error.message));  
   }
 };
 
-export const removeCouponFromCart = (showSnackbar) => async (dispatch) => {
+export const removeCouponFromCart = (addSnackbar) => async (dispatch) => {
   dispatch(removeCoupon());
-  showSnackbar({ message: "Coupon removed!", type: "notify" });
+  addSnackbar({ message: "Coupon removed!", type: "notify" });
 };
 
 export const clearCartFromBackend = (token, userId) => async (dispatch) => {

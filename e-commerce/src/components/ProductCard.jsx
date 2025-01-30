@@ -10,12 +10,12 @@ const ProductCard = ({ id, name, price, originalPrice, discount, imageUrl, stock
   const dispatch = useDispatch();
   const { isLoggedIn, user } = useSelector((state) => state.auth);
   const token = useSelector((state) => state.auth.token);
-  const showSnackbar = useSnackbar();
+  const addSnackbar  = useSnackbar();
 
   // Handle Add to Cart
   const handleAddToCart = () => {
     if (!isLoggedIn) {
-      showSnackbar({
+      addSnackbar({
         message: "Please login to add items to your cart!",
         type: "alert",
         position: "top-right",
@@ -31,7 +31,7 @@ const ProductCard = ({ id, name, price, originalPrice, discount, imageUrl, stock
         token,
       })
     );
-    showSnackbar({
+    addSnackbar({
       message: "Item added to your cart!",
       type: "added-to-cart",
       position: "top-right",
@@ -42,7 +42,7 @@ const ProductCard = ({ id, name, price, originalPrice, discount, imageUrl, stock
   // Handle Wishlist Toggle
   const handleWishlistToggle = () => {
     if (!isLoggedIn) {
-      showSnackbar({
+      addSnackbar({
         message: "Please login to manage your wishlist!",
         type: "alert",
         position: "top-right",
@@ -52,7 +52,7 @@ const ProductCard = ({ id, name, price, originalPrice, discount, imageUrl, stock
     }
     if (isWishlisted) {
       dispatch(removeFromWishlist(token, user.id, id));
-      showSnackbar({
+      addSnackbar({
         message: "Item removed from your wishlist!",
         type: "deleted",
         position: "top-right",
@@ -62,7 +62,7 @@ const ProductCard = ({ id, name, price, originalPrice, discount, imageUrl, stock
       dispatch(
         addToWishlist(token, user.id, { id, name, price, imageUrl, stock })
       );
-      showSnackbar({
+      addSnackbar({
         message: "Item added to your wishlist!",
         type: "added-to-wishlist",
         position: "top-right",
@@ -153,7 +153,7 @@ const ProductCard = ({ id, name, price, originalPrice, discount, imageUrl, stock
             whileTap={{ scale: 0.9 }}
             className={`p-2 rounded-lg font-medium text-xs transition-colors shadow-md ${
               isWishlisted
-                ? "bg-pink-600 text-white hover:bg-pink-700"
+                ? "bg-gray-700 text-pink-600 hover:text-gray-200"
                 : "bg-gray-700 text-gray-200 hover:bg-gray-600"
             }`}
           >

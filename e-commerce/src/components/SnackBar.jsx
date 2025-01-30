@@ -4,7 +4,7 @@ import {
   FiCheckCircle,
   FiAlertCircle,
   FiInfo,
-  FiXCircle,
+  FiX,
   FiShoppingCart,
   FiHeart,
   FiTrash,
@@ -14,119 +14,125 @@ import {
 } from "react-icons/fi";
 
 const Snackbar = ({
-  type = "success", // success, error, alert, notify, added-to-cart, added-to-wishlist, deleted, payment-successful, celebration, login, logout
+  type = "success",
   message = "This is a notification!",
   duration = 5000,
-  position = "top-right", // top-left, top-right, bottom-left, bottom-right, bottom-center, top-center
+  position = "top-right",
   onClose,
 }) => {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const [progress, setProgress] = useState(100);
 
   useEffect(() => {
     setVisible(true);
+    const interval = setInterval(() => {
+      setProgress((prev) => Math.max(prev - 100 / (duration / 50), 0));
+    }, 50);
 
     const timer = setTimeout(() => {
-      setVisible(false);
-      onClose && onClose();
+      handleClose();
     }, duration);
 
-    return () => clearTimeout(timer);
-  }, [duration, onClose]);
+    return () => {
+      clearTimeout(timer);
+      clearInterval(interval);
+    };
+  }, [duration]);
+
+  const handleClose = () => {
+    setVisible(false);
+    setTimeout(() => onClose?.(), 300);
+  };
 
   const typeStyles = {
     success: {
-      bg: "bg-green-500",
-      text: "text-white",
-      icon: <FiCheckCircle className="w-6 h-6 text-white" />,
+      bg: "bg-gradient-to-r from-green-600 to-green-700",
+      icon: <FiCheckCircle className="w-5 h-5" />,
     },
     error: {
-      bg: "bg-red-500",
-      text: "text-white",
-      icon: <FiXCircle className="w-6 h-6 text-white" />,
+      bg: "bg-gradient-to-r from-red-600 to-red-700",
+      icon: <FiAlertCircle className="w-5 h-5" />,
     },
     alert: {
-      bg: "bg-yellow-500",
-      text: "text-black",
-      icon: <FiAlertCircle className="w-6 h-6 text-black" />,
+      bg: "bg-gradient-to-r from-yellow-600 to-yellow-700",
+      icon: <FiAlertCircle className="w-5 h-5" />,
     },
     notify: {
-      bg: "bg-blue-500",
-      text: "text-white",
-      icon: <FiInfo className="w-6 h-6 text-white" />,
+      bg: "bg-gradient-to-r from-blue-600 to-blue-700",
+      icon: <FiInfo className="w-5 h-5" />,
     },
     "added-to-cart": {
-      bg: "bg-purple-500",
-      text: "text-white",
-      icon: <FiShoppingCart className="w-6 h-6 text-white" />,
+      bg: "bg-gradient-to-r from-purple-600 to-purple-700",
+      icon: <FiShoppingCart className="w-5 h-5" />,
     },
     "added-to-wishlist": {
-      bg: "bg-pink-500",
-      text: "text-white",
-      icon: <FiHeart className="w-6 h-6 text-white" />,
+      bg: "bg-gradient-to-r from-pink-600 to-pink-700",
+      icon: <FiHeart className="w-5 h-5" />,
     },
     deleted: {
-      bg: "bg-gray-700",
-      text: "text-white",
-      icon: <FiTrash className="w-6 h-6 text-white" />,
+      bg: "bg-gradient-to-r from-gray-700 to-gray-800",
+      icon: <FiTrash className="w-5 h-5" />,
     },
     "payment-successful": {
-      bg: "bg-teal-500",
-      text: "text-white",
-      icon: <FiCreditCard className="w-6 h-6 text-white" />,
+      bg: "bg-gradient-to-r from-teal-600 to-teal-700",
+      icon: <FiCreditCard className="w-5 h-5" />,
     },
     celebration: {
-      bg: "bg-orange-500",
-      text: "text-white",
-      icon: <FiSmile className="w-6 h-6 text-white animate-bounce" />,
+      bg: "bg-gradient-to-r from-orange-600 to-orange-700",
+      icon: <FiSmile className="w-5 h-5 animate-pulse" />,
     },
     login: {
-      bg: "bg-green-700",
-      text: "text-white",
-      icon: <FiUser className="w-6 h-6 text-white" />,
+      bg: "bg-gradient-to-r from-green-700 to-green-800",
+      icon: <FiUser className="w-5 h-5" />,
     },
     logout: {
-      bg: "bg-red-700",
-      text: "text-white",
-      icon: <FiUser className="w-6 h-6 text-white" />,
+      bg: "bg-gradient-to-r from-red-700 to-red-800",
+      icon: <FiUser className="w-5 h-5" />,
     },
   };
 
   const positionStyles = {
-    "top-right": "top-4 right-4",
-    "top-left": "top-4 left-4",
-    "bottom-right": "bottom-4 right-4",
-    "bottom-left": "bottom-4 left-4",
-    "top-center": "top-4 left-1/2 transform -translate-x-1/2",
-    "bottom-center": "bottom-4 left-1/2 transform -translate-x-1/2",
+    "top-right": "top-6 right-6 animate-slide-in-right",
+    "top-left": "top-6 left-6 animate-slide-in-left",
+    "bottom-right": "bottom-6 right-6 animate-slide-in-right",
+    "bottom-left": "bottom-6 left-6 animate-slide-in-left",
+    "top-center": "top-6 left-1/2 -translate-x-1/2 animate-slide-in-top",
+    "bottom-center": "bottom-6 left-1/2 -translate-x-1/2 animate-slide-in-bottom",
   };
 
   return (
     <div
-      className={`fixed z-50 transition-all duration-500 ease-in-out transform ${
-        visible
-          ? "translate-y-0 opacity-100 scale-100"
-          : "translate-y-[-50%] opacity-0 scale-95"
-      } ${positionStyles[position]} ${typeStyles[type].bg} px-8 py-5 rounded-lg shadow-lg flex items-center space-x-4`}
-      style={{ minWidth: "320px", maxWidth: "420px" }}
+      role="alert"
+      aria-live="assertive"
+      className={`fixed z-50 ${positionStyles[position]} ${
+        visible ? "visible" : "invisible opacity-0 scale-95"
+      } transition-all duration-300 ease-out`}
     >
-      {/* Icon */}
-      <div>{typeStyles[type].icon}</div>
-
-      {/* Message */}
-      <div className={`flex-1 font-semibold ${typeStyles[type].text} text-lg`}>
-        {message}
-      </div>
-
-      {/* Close Button */}
-      <button
-        className="text-white text-lg font-bold"
-        onClick={() => {
-          setVisible(false);
-          onClose && onClose();
-        }}
+      <div
+        className={`${typeStyles[type].bg} rounded-xl shadow-2xl p-4 min-w-[280px] max-w-[90vw] relative overflow-hidden`}
       >
-        ✕
-      </button>
+        {/* Progress Bar */}
+        <div
+          className="absolute top-0 left-0 h-1 bg-white/20 transition-all duration-50 ease-linear"
+          style={{ width: `${progress}%` }}
+        />
+
+        <div className="flex items-start gap-3">
+          <div className="shrink-0 pt-0.5">{typeStyles[type].icon}</div>
+          
+          <div className="flex-1 text-white">
+            <p className="text-sm font-medium leading-tight pr-6">{message}</p>
+          </div>
+
+          <button
+            onClick={handleClose}
+            className="absolute top-2 right-2 p-1 hover:bg-white/10 rounded-full transition-colors"
+            aria-label="Close notification"
+          >
+            <FiX className="w-4 h-4 text-white/80" />
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

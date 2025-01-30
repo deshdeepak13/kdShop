@@ -8,20 +8,20 @@ import { useSnackbar } from './SnackbarProvider';
 const Logout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const showSnackbar = useSnackbar();
+  const addSnackbar = useSnackbar();
 
   const handleLogout = () => {
     dispatch(logout()); // Reset the Redux store
     localStorage.removeItem('token'); // Clear JWT or token
     navigate("/");
-    showSnackbar({message:`Logged Out successfully!`,type:"logout"});
+    addSnackbar({message:`Logged Out successfully!`,type:"logout"});
     // window.location.href = '/login'; // Optionally redirect to login or home page
   };
 
   return (
     <button
       onClick={handleLogout}
-      className="py-2 px-4 bg-red-500 text-white rounded-md hover:bg-red-600"
+      className="text-white "
     >
       Logout
     </button>

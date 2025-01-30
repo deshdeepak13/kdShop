@@ -13,7 +13,9 @@ const Home = () => {
     // Fetch product data from backend
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/v1/products");
+        const response = await axios.get(
+          "http://localhost:3000/api/v1/products"
+        );
         setProducts(response.data); // Assuming the response has the array directly
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -36,13 +38,25 @@ const Home = () => {
           interval={1500}
         >
           <div>
-            <img src="slide1.webp" alt="Image 1" className="rounded-lg shadow-lg" />
+            <img
+              src="slide1.webp"
+              alt="Image 1"
+              className="rounded-lg shadow-lg object-cover w-full h-[200px]"
+            />
           </div>
           <div>
-            <img src="slide3.webp" alt="Image 2" className="rounded-lg shadow-lg" />
+            <img
+              src="slide3.webp"
+              alt="Image 1"
+              className="rounded-lg shadow-lg object-cover w-full h-[200px]"
+            />
           </div>
           <div>
-            <img src="slide1.webp" alt="Image 3" className="rounded-lg shadow-lg" />
+            <img
+              src="slide1.webp"
+              alt="Image 1"
+              className="rounded-lg shadow-lg object-cover w-full h-[200px]"
+            />
           </div>
         </Carousel>
       </section>
@@ -51,9 +65,11 @@ const Home = () => {
       <section className="section1 flex mt-10 gap-5 flex-wrap p-6 bg-gray-800 text-white">
         {Array.isArray(products) && products.length > 0 ? (
           products.map((product) => {
-            const isWishlisted = wishlist.some((item) => item.id === product._id);
+            const isWishlisted = wishlist.some(
+              (item) => item.id === product._id
+            );
             return (
-              <ProductCard
+              <ProductCard 
                 key={product._id}
                 id={product._id}
                 name={product.name}

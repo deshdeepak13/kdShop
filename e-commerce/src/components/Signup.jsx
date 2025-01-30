@@ -10,8 +10,8 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-const Signup = ({ onClose }) => {
-  const showSnackbar = useSnackbar();
+const Signup = ({ onClose , openLogin }) => {
+  const addSnackbar = useSnackbar();
   const navigate = useNavigate();
   const {
     register,
@@ -61,8 +61,8 @@ const Signup = ({ onClose }) => {
       reset();
       setPhoto(null);
       onClose();
+      addSnackbar({message:`Welcome, ${name}!`,type:"login"})
       navigate("/");
-      showSnackbar({message:`Welcome, ${name}!`,type:"login"})
 
       // Optionally, redirect to a different page or show success message
     } catch (error) {
@@ -206,9 +206,10 @@ const Signup = ({ onClose }) => {
         <div className="mt-4 text-center">
           <p className="text-sm text-gray-400">
             Already have an account?{' '}
-            <Link to="/login" className="text-blue-500 hover:underline">
-              Login
-            </Link>
+            {/* <Link to="/login" className="text-blue-500 hover:underline"> */}
+            <span className="text-blue-500 hover:underline cursor-pointer" onClick={openLogin}>Login</span>
+              
+            {/* </Link> */}
           </p>
         </div>
       </div>

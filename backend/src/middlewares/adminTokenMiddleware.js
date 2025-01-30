@@ -12,7 +12,7 @@ const adminTokenMiddleware = (req, res, next) => {
 
   try {
     // Verify the token using the secret key from the environment variable
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || "secret-123");
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     console.log(decoded);
 
     // Check if the user has the 'admin' role

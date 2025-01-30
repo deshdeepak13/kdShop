@@ -13,7 +13,7 @@ const stripePublicKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
 const stripePromise = loadStripe(stripePublicKey);
 
 const CheckoutForm = ({ totalAmount, onClose, address }) => {
-  const showSnackbar = useSnackbar();
+  const addSnackbar = useSnackbar();
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
@@ -113,10 +113,10 @@ const CheckoutForm = ({ totalAmount, onClose, address }) => {
       setTimeout(() => {
         navigate("/");
       }, 1000);
-      showSnackbar({message:`Order Placed Successfully !!!`,type:"payment-successful"});
+      addSnackbar({message:`Order Placed Successfully !!!`,type:"payment-successful"});
     } catch (err) {
       setError("Payment failed. Please try again.");
-      showSnackbar({message:`${error}`,type:"error"});
+      addSnackbar({message:`${error}`,type:"error"});
       // console.error("Payment error:", err);
     }
 

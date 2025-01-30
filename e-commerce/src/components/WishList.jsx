@@ -33,9 +33,9 @@ const WishlistPage = () => {
         ) : wishlistItems.length === 0 ? (
           <p>Your wishlist is empty.</p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+          <div className="flex flex-wrap -mx-2">
             {wishlistItems.map((product) => (
-              <div key={product._id} className="relative bg-gray-800 p-4 rounded-lg shadow-lg">
+              <div key={product._id} className="relative  p-4 rounded-lg shadow-lg">
                 <ProductCard
                   id={product._id}
                   name={product.name}
