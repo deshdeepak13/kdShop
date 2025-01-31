@@ -3,7 +3,7 @@ import { body, validationResult } from 'express-validator';
 import User from '../models/userSchema.js'; // Import the User model
 import Order from '../models/orderSchema.js'; // Import the User model
 // import Product from '../models/productSchema.js'; // Import the Product model
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import multer from 'multer';
 import mongoose from 'mongoose';
