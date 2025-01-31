@@ -32,7 +32,6 @@ const AdminLogin = () => {
       const { jwtToken, adminDetails, message } = response.data;
       localStorage.setItem("admintoken", jwtToken);
       setIsLoggedIn(true);
-      console.log(message);
     } catch (err) {
       const errorMessage = err.response?.data?.message || "Failed to login. Please try again.";
       setError(errorMessage);

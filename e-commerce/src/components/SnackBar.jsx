@@ -105,7 +105,7 @@ const Snackbar = ({
       role="alert"
       aria-live="assertive"
       className={`fixed z-50 ${positionStyles[position]} ${
-        visible ? "visible" : "invisible opacity-0 scale-95"
+        visible ? "visible opacity-100 scale-100" : "invisible opacity-0 scale-95"
       } transition-all duration-300 ease-out`}
     >
       <div

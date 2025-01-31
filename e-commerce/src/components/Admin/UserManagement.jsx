@@ -17,7 +17,6 @@ const UserManagement = () => {
         }
       );
       setUsers(response.data);
-      console.log(response.data);
     } catch (err) {
       setError("Failed to fetch users");
     }

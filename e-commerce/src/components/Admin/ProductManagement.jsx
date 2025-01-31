@@ -127,7 +127,7 @@ const ProductManagement = () => {
       setProducts(products.filter((product) => product._id !== id));
       addSnackbar({message:`Product removed from inventory!`,type:"deleted"});
     } catch (err) { 
-      console.log(err)
+      // console.log(err)
       addSnackbar({message:`Failed to delted product!`,type:"error"});
       setError('Failed to delete product');
     }

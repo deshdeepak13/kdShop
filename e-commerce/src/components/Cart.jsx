@@ -21,6 +21,7 @@ const Cart = () => {
       dispatch(setError(null));
       dispatch(fetchCartItems(token, user.id));
       
+      
     }
   }, [dispatch, token, user]);
 
@@ -92,7 +93,7 @@ const Cart = () => {
           {loading ? (
             <div className="space-y-4">
               {[...Array(3)].map((_, i) => (
-                <div key={i} className="p-4 bg-gray-700 rounded-lg">
+                <div key={`skeleton-${i}`} className="p-4 bg-gray-700 rounded-lg">
                   <Skeleton height={120} baseColor="#1f2937" highlightColor="#374151" />
                 </div>
               ))}
@@ -113,7 +114,7 @@ const Cart = () => {
               <div className="space-y-4 mb-6">
                 {cartItems.map((item) => (
                   <CartItem
-                    key={item.product._id}
+                    key={`cartitem-${item.product._id}`}
                     quantity={qtyArr[item.product._id] || item.quantity}
                     product={item.product}
                     onQuantityChange={(id, qty) => setQtyArr(prev => ({ ...prev, [id]: qty }))}

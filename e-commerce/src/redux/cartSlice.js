@@ -106,6 +106,7 @@ export const fetchCartItems = (token, userId) => async (dispatch) => {
       headers: { Authorization: `Bearer ${token}` },
     });
     dispatch(setCartItems(response.data.cart));
+    
   } catch (error) {
     dispatch(setError(error.message));
   } finally { 
@@ -183,7 +184,7 @@ export const applyCouponToCart = (token, userId, couponCode,addSnackbar) => asyn
   } catch (error) {
     // console.log(error)
     addSnackbar({message:`"${couponCode} is invalid Coupon" `,type:"error"})
-    console.log(error.toJSON());
+    // console.log(error.toJSON());
 
     // dispatch(setError(error.message));  
   }
@@ -202,7 +203,7 @@ export const clearCartFromBackend = (token, userId) => async (dispatch) => {
     await axios.delete(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/user/${userId}/cart`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    console.log(userId);
+    // console.log(userId);
 
     // Clear cart from Redux state after successful API call
     dispatch(clearCart());

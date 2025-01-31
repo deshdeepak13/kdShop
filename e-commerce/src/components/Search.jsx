@@ -72,6 +72,14 @@ const Search = () => {
 
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
+  useEffect(() => {
+    if (isFiltersOpen) {
+      document.body.classList.add('filter-open');
+    } else {
+      document.body.classList.remove('filter-open');
+    }
+  }, [isFiltersOpen]);
+
   // Add debounce for search input
   const [searchInput, setSearchInput] = useState("");
   
@@ -124,11 +132,11 @@ const Search = () => {
       <aside
         className={`${
           isFiltersOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 w-2/3 md:w-72 lg:w-80 overflow-y-auto md:relative h-screen md:h-auto z-20 bg-gray-900 border-r border-gray-700 transition-transform duration-300 ease-in-out sticky`}
+        } fixed md:relative inset-y-0 left-0 w-2/3 md:w-72 lg:w-80 z-50 bg-gray-900 border-r border-gray-700 transition-transform duration-300 ease-in-out overflow-hidden md:transform-none`}
       >
-        <div className="p-4 md:p-6 overflow-y-auto h-full">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold text-gray-100">Filters</h2>
+        <div className="p-4 md:p-6 h-full flex flex-col">
+    <div className="flex justify-between items-center mb-6">
+      <h2 className="text-xl font-bold text-gray-100">Filters</h2>
             <button
               onClick={() => setIsFiltersOpen(false)}
               className="md:hidden text-gray-400 hover:text-white"
@@ -215,7 +223,7 @@ const Search = () => {
           {/* Reset Button Desktop */}
           <button
             onClick={resetFilters}
-            className="hidden md:block w-full py-2 px-4 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-md transition-colors"
+            className="md:hidden mt-4 py-2 w-full bg-purple-600 hover:bg-purple-500 text-white rounded-md transition-colors"
           >
             Reset Filters
           </button>
@@ -263,7 +271,7 @@ const Search = () => {
 
         {/* Products Grid */}
         {!isLoading && !error && (
-          <div className="flex flex-wrap -mx-2 gap-5">
+          <div className="flex flex-wrap -mx-2 gap-5 justify-center sm:justify-start">
             {filteredProducts.map((product) => {
               const isWishlisted = wishlist.some(
                 (item) => item.id === product._id

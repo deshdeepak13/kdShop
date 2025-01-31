@@ -52,7 +52,7 @@ export const fetchWishlistItems = (token, userId) => async (dispatch) => {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
-    console.log(response.data);
+    // console.log(response.data);
     dispatch(setWishlistItems(response.data.wishlist));
     
   } catch (error) {

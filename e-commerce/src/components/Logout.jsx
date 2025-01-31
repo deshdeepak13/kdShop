@@ -19,12 +19,12 @@ const Logout = () => {
   };
 
   return (
-    <button
+    <span
       onClick={handleLogout}
-      className="text-white "
+      className="hover:text-white transition-colors"
     >
       Logout
-    </button>
+    </span>
   );
 };
 

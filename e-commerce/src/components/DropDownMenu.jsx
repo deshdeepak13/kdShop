@@ -14,7 +14,6 @@ const DropdownMenu = ({ title, initials, mobile }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
-  
   const closeDropdown = () => setIsOpen(false);
 
   return (
@@ -43,6 +42,7 @@ const DropdownMenu = ({ title, initials, mobile }) => {
       {isOpen && (
         <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-gray-900 ring-1 ring-black ring-opacity-5">
           <div className="py-2">
+            {/* ... other menu items remain the same ... */}
             <NavLink
               to="/orders"
               onClick={closeDropdown}
@@ -95,13 +95,13 @@ const DropdownMenu = ({ title, initials, mobile }) => {
               <span>Coupons</span>
             </NavLink>
 
-            <button
-              onClick={closeDropdown}
-              className="flex items-center w-full px-4 py-2 text-sm space-x-2 text-gray-300 hover:bg-red-500"
-            >
+
+            {/* Fixed Logout item */}
+            <div className="flex items-center px-4 py-2 text-sm space-x-2 text-gray-300 hover:bg-red-500 cursor-pointer" 
+            onClick={closeDropdown}>
               <FiLogOut className="text-lg" />
-              <Logout />
-            </button>
+              <Logout/>
+            </div>
           </div>
         </div>
       )}
