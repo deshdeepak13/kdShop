@@ -12,7 +12,7 @@ const Modal = ({ onClose, address }) => {
 
   // Render order summary or payment gateway
   return (
-    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50 bg-gray-800">
+    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50 ">
       <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-11/12 sm:w-1/2 md:w-1/3">
         {!isPayment ? (
           // Order Summary View
