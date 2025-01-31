@@ -17,6 +17,7 @@ const Home = () => {
           `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/products`
         );
         setProducts(response.data); // Assuming the response has the array directly
+        
       } catch (error) {
         console.error("Error fetching products:", error);
       }

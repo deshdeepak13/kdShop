@@ -20,6 +20,7 @@ import paymentintentRoute from "./src/routes/paymentintent.js";
 import orderRoute from "./src/routes/order.js";
 import adminRoute from "./src/routes/admin.js";
 import couponRoute from "./src/routes/coupons.js"
+import categoryRoute from "./src/routes/categories.js"
 // import paymentRoute from "./routes/payment.js";
 // import dashboardRoute from "./routes/stats.js";
 
@@ -57,13 +58,14 @@ app.use("/api/v1/payments", paymentintentRoute);
 app.use("/api/v1/orders", orderRoute);
 app.use("/api/v1/admin", adminRoute);
 app.use("/api/v1/coupon", couponRoute);
+app.use("/api/v1/category", categoryRoute);
 // app.use("/api/v1/payment", paymentRoute);
 // app.use("/api/v1/dashboard", dashboardRoute);
 
 
 
 // Start the server
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

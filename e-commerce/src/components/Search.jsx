@@ -20,8 +20,8 @@ const Search = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/categories`);
-      setCategories(response.data);
+      const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/category`);
+      setCategories(response.data.categories);
     } catch (err) {
       console.error("Failed to fetch categories", err);
     }
@@ -202,7 +202,7 @@ const Search = () => {
             >
               <option value="all">All Categories</option>
               {categories.map((category) => (
-                <option key={category._id} value={category._id}>
+                <option key={category._id} value={category.name}>
                   {category.name}
                 </option>
               ))}

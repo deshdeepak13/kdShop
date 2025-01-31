@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { useDispatch } from 'react-redux';
 import Loading from './components/Loading';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import Modal from './components/Modal';
 import initializeAuth from './auth/initializeAuth';
 import './components/App.css';
@@ -148,6 +149,8 @@ const closeSignup = () => {
       <Modal isOpen={isSignupOpen} onClose={closeSignup}>
       <Signup onClose={closeSignup} openLogin={openLogin} />
       </Modal>
+      <Footer />
+
       </div>
     </>
   );

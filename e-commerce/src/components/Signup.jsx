@@ -48,10 +48,10 @@ const Signup = ({ onClose , openLogin }) => {
       });
 
       // Handle successful response
-      console.log('Signup successful:', response.data);
 
       // Dispatch login action with user info and JWT token
-      const { jwtToken, email, name } = response.data;
+      const { jwtToken, email, name,id } = response.data;
+      
       dispatch(login({ user: { email, name,id }, token: jwtToken }));
 
       // Store JWT in localStorage for persistence

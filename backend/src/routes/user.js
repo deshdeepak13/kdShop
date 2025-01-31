@@ -53,7 +53,7 @@ router.post('/signup', upload.single('photo'), [
     }
 
     // Hash the password before saving
-    const hashedPassword = await bcrypt.hash(password, process.env.BCRYPT_HASH);
+    const hashedPassword = await bcrypt.hash(password, parseInt(process.env.BCRYPT_HASH, 10));
 
     // Create a new user using the User model
     const newUser = new User({
@@ -73,6 +73,7 @@ router.post('/signup', upload.single('photo'), [
       process.env.JWT_SECRET,
       { expiresIn: '24h' }
   )
+
 
     // Send a success response
     res.status(201).json({

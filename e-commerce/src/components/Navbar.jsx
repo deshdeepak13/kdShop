@@ -27,7 +27,7 @@ const Navbar = ({ openLogin, openSignup }) => {
             to="/"
             className="text-2xl font-bold text-white hover:text-purple-300 transition-colors"
           >
-            {"<ddShop"}
+            {"<kdShop"}
             <span className="text-purple-500">{"/>"}</span>
           </Link>
 

@@ -82,12 +82,13 @@ const ProductCard = ({ id, name, price, originalPrice, discount, imageUrl, stock
       <AnimatePresence>
         {discount && (
           <motion.div
+            key="discount-ribbon"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            exit={{ scale: 0 }}
-            className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md"
+            exit={{ scale: 0,opacity:0 }}
+            className="absolute z-40 top-5 left-2 bg-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md"
           >
-            {discount}% OFF
+            {discount}% OFF 
           </motion.div>
         )}
       </AnimatePresence>
