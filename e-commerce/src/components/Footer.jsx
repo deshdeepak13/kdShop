@@ -6,7 +6,7 @@ export default function Footer() {
           {/* About Section */}
           <div className="animate-slide-in-left flex-row">
             <span className="text-2xl font-bold text-white hover:text-purple-300 transition-colors">
-              {"<kdShop"}
+              {"<ddShop"}
               <span className="text-purple-500">{"/>"}</span>
             </span>
             <div className="mt-5">
