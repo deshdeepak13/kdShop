@@ -6,6 +6,7 @@ const ChatBot = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  
 
   const sendMessage = async () => {
     if (!input.trim()) return;
