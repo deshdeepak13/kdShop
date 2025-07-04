@@ -6,9 +6,10 @@ import adminTokenMiddleware from '../middlewares/adminTokenMiddleware.js'
 import User from "../models/userSchema.js"; // Replace with the correct path to your User model
 import Product from '../models/productSchema.js';  // Your Product schema
 import Order from '../models/orderSchema.js';  // Your Order schema
-import multer from 'multer';
+// import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
+import upload from "../middlewares/multerProduct.js";
 
 
 const router = express.Router();
@@ -274,20 +275,52 @@ router.get('/dashboard',adminTokenMiddleware, async (req, res) => {
 
 
 // Setup for multer file upload
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadDir = 'public/images';
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir);
-    }
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     const uploadDir = 'public/images';
+//     if (!fs.existsSync(uploadDir)) {
+//       fs.mkdirSync(uploadDir);
+//     }
+//     cb(null, uploadDir);
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, Date.now() + path.extname(file.originalname));
+//   },
+// });
 
-const upload = multer({ storage });
+// const upload = multer({ storage });
+
+
+
+// Create a new product
+router.post('/products', upload.array('images'), async (req, res) => {
+  const { name, description, MRP, discount, stock, category } = req.body;
+  // const images = req.files.map((file) => file.filename);
+
+  if (!name || !description || !MRP || !discount || !stock || !category) {
+    return res.status(400).json({ message: 'All fields are required' });
+  }
+
+  const imageUrls = req.files.map((file) => file.path); // cloudinary URL
+
+  try {
+    const newProduct = new Product({
+      name,
+      description,
+      MRP,
+      discount,
+      stock,
+      category,
+      imageUrl: imageUrls,
+      // imageUrl: images,
+    });
+
+    const product = await newProduct.save();
+    res.status(201).json(product);
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to add product' });
+  }
+});
 
 
 // Get all products for admin
@@ -300,32 +333,7 @@ router.get('/products', async (req, res) => {
   }
 });
 
-// Create a new product
-router.post('/products', upload.array('images'), async (req, res) => {
-  const { name, description, MRP, discount, stock, category } = req.body;
-  const images = req.files.map((file) => file.filename);
 
-  if (!name || !description || !MRP || !discount || !stock || !category) {
-    return res.status(400).json({ message: 'All fields are required' });
-  }
-
-  try {
-    const newProduct = new Product({
-      name,
-      description,
-      MRP,
-      discount,
-      stock,
-      category,
-      imageUrl: images,
-    });
-
-    const product = await newProduct.save();
-    res.status(201).json(product);
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to add product' });
-  }
-});
 
 // Update a product
 router.put('/product/:id', upload.array('images'), async (req, res) => {

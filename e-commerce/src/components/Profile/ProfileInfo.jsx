@@ -54,7 +54,7 @@ const ProfileInformation = () => {
               </div>
             ) : (
               <img
-                src={`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/uploads/${profileData?.photo || "default-profile.jpg"}`}
+                src={`${profileData?.photo || "default-profile.jpg"}`}
                 alt="Profile"
                 className="w-full h-full object-cover transition-transform group-hover:scale-105"
                 onError={handleImageError}

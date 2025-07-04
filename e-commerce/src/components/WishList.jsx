@@ -42,7 +42,7 @@ const WishlistPage = () => {
                   price={product.currentPrice}
                   originalPrice={product.MRP}
                   discount={product.discount}
-                  imageUrl={`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/public/images/${product.imageUrl?.[0] || 'default-product.jpg'}`}
+                  imageUrl={`${product.imageUrl?.[0] || 'default-product.jpg'}`}
                   stock={product.stock}
                   isWishlisted={true} // Always wishlisted since it's in the wishlist
                   handleRemoveWish={() => handleDelete(product._id)}

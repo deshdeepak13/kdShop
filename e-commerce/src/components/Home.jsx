@@ -20,6 +20,7 @@ const Home = () => {
           `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/products`
         );
         setProducts(response.data);
+        console.log("Products fetched successfully:", response.data);
         setError(null);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -100,7 +101,7 @@ const Home = () => {
                 const imageUrl = product.imageUrl?.[0] 
                   ? product.imageUrl[0].startsWith('http') 
                     ? product.imageUrl[0]
-                    : `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/public/images/${product.imageUrl[0]}`
+                    : `${product.imageUrl[0]}`
                   : "/default-product.jpg";
 
                 return (

@@ -25,7 +25,7 @@ const Modal = ({ onClose, address }) => {
                   className="flex items-center justify-between bg-gray-800"
                 >
                   <img
-                    src={`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/public/images/${
+                    src={`${
                       item.product.imageUrl?.[0] || "default-product.jpg"
                     }`} //product.imageUrl
                     alt={item.product.name}

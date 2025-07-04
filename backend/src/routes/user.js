@@ -5,7 +5,8 @@ import Order from '../models/orderSchema.js'; // Import the User model
 // import Product from '../models/productSchema.js'; // Import the Product model
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import multer from 'multer';
+import upload from '../middlewares/multerUser.js';
+// import multer from 'multer';
 import mongoose from 'mongoose';
 import verifyTokenMiddleware from '../middlewares/verifyTokenMiddleware.js'; // Import the middleware
 
@@ -13,16 +14,16 @@ const router = express.Router();
 
 
 // Configure multer for file uploads (e.g., photo)
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Directory to store uploaded files
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`); // Unique file naming
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, 'uploads/'); // Directory to store uploaded files
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, `${Date.now()}-${file.originalname}`); // Unique file naming
+//   },
+// });
 
-const upload = multer({ storage: storage });
+// const upload = multer({ storage: storage });
 
 
 
@@ -44,7 +45,10 @@ router.post('/signup', upload.single('photo'), [
   try {
     // Destructure the user data from the request body
     const { name, gender, email, dob, password } = req.body;
-    const photo = req.file ? req.file.filename : "default.jpg"; 
+
+    // If the user uploaded a photo, get the Cloudinary URL from req.file.path
+    const photoUrl = req.file ? req.file.path : 'default.jpg';  // Default photo if not provided
+    // const photo = req.file ? req.file.filename : "default.jpg"; 
 
     // Check if the user already exists
     const existingUser = await User.findOne({ email });
@@ -61,7 +65,7 @@ router.post('/signup', upload.single('photo'), [
       gender,
       email,
       dob,
-      photo,
+      photo:photoUrl,
       password: hashedPassword, // Save hashed password
     });
 

@@ -284,7 +284,7 @@ const Search = () => {
                 price={product.currentPrice}
                 originalPrice={product.MRP}
                 discount={product.discount}
-                imageUrl={`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/public/images/${
+                imageUrl={`${
                   product.imageUrl?.[0] || "default-product.jpg"
                 }`}
                 stock={product.stock}

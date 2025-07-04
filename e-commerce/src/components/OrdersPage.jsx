@@ -273,7 +273,7 @@ const MyOrders = () => {
                       {order.orderItems.map((item) => (
                         <div key={item.productId} className="flex items-start gap-4 p-3 bg-gray-700 rounded-lg">
                           <img
-                            src={`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/public/images/${item.imageUrl || "default-product.jpg"}`}
+                            src={`${item.imageUrl || "default-product.jpg"}`}
                             alt={item.productName}
                             className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
                           />

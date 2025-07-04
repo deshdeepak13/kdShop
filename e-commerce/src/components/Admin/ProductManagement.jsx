@@ -29,6 +29,7 @@ const ProductManagement = () => {
         }
       });
       setProducts(response.data);
+      console.log('Products fetched successfully:', response.data);
       setLoading(false);
     } catch (err) {
       setError('Failed to fetch products');
@@ -171,7 +172,7 @@ const ProductManagement = () => {
                 {product.imageUrl?.map((url, index) => (
                   <img
                     key={index}
-                    src={`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/public/images/${url}`}
+                    src={`${url}`}
                     alt={product.name}
                     className="w-20 h-20 object-contain mr-2"
                   />

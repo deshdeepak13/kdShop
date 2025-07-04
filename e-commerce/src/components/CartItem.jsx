@@ -54,7 +54,7 @@ const CartItem = ({ product, quantity, onQuantityChange }) => {
           </div>
         ) : (
           <img
-            src={`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/public/images/${imageUrl?.[0] || "default-product.jpg"}`}
+            src={`${imageUrl?.[0] || "default-product.jpg"}`}
             alt={name}
             className="w-full h-full object-cover rounded-lg border border-gray-700"
             onError={() => setImageError(true)}
