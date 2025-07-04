@@ -7,7 +7,7 @@ import Footer from './components/Footer';
 import Modal from './components/Modal';
 import initializeAuth from './auth/initializeAuth';
 import './components/App.css';
-// import ChatBot  from './components/ChatBot';
+import Chatbot  from './components/Chatbot';
 
 import Login from './components/Login';
 import Signup from './components/Signup';
@@ -143,7 +143,7 @@ const closeSignup = () => {
             path="/chat"
             element={
               <Suspense fallback={<Loading />}>
-                {/* <ChatBot/> */}
+                <Chatbot/>
               </Suspense>
             }
           />
@@ -160,7 +160,7 @@ const closeSignup = () => {
       <Signup onClose={closeSignup} openLogin={openLogin} />
       </Modal>
       {/* <h1>Chat with our bot</h1> */}
-      {/* <ChatBot /> */}
+      <Chatbot />
       <Footer />
 
       </div>

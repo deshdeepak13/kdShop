@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FaComments, FaRobot, FaPaperPlane } from "react-icons/fa";
 import ReactMarkdown from "react-markdown";
 
-const ChatBot = () => {
+const Chatbot = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -233,4 +233,4 @@ const ChatBot = () => {
   );
 };
 
-export default ChatBot;
+export default Chatbot;
