@@ -2,6 +2,7 @@ import axios from "axios";
 
 export const chatWithGroq = async (req, res) => {
   const { messages } = req.body;
+  console.log(req.body);
 
 if (!messages || !Array.isArray(messages)) {
   return res.status(400).json({ error: "Invalid or missing messages array" });
@@ -51,6 +52,7 @@ Avoid long paragraphs. Style responses like exciting text messages!
     res.json({ replyChunks });
 
   } catch (error) {
+    console.log(error);
     console.error("Groq API Error:", error.response?.data || error.message);
     res.status(500).json({ error: "Chatbot failed to respond" });
   }

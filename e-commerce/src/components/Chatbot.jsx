@@ -78,7 +78,7 @@ const Chatbot = () => {
             <div className="flex justify-between items-center p-5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-t-2xl">
               <div className="flex items-center space-x-3">
                 <FaRobot className="text-white text-xl" />
-                <h2 className="text-white font-bold text-lg">AI Assistant</h2>
+                <h2 className="text-white font-bold text-lg">kd.AI</h2>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
