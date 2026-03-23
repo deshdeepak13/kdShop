@@ -4,6 +4,11 @@ import Category from "../models/categorySchema.js"; // Import Category model
 const router = express.Router();
 
 // Fetch all categories
+/**
+ * @route GET /api/v1/category
+ * @desc Get all product categories
+ * @access Public
+ */
 router.get("/", async (req, res) => {
   try {
     const categories = await Category.find(); // Retrieve categories from DB

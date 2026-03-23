@@ -13,6 +13,17 @@ import {
   FiSmile,
 } from "react-icons/fi";
 
+/**
+ * Toast notification component.
+ * Displays temporary messages with different types (success, error, etc.).
+ *
+ * @param {Object} props - Component props
+ * @param {string} props.type - Notification type (success, error, etc.)
+ * @param {string} props.message - Notification message
+ * @param {number} props.duration - Duration in ms
+ * @param {string} props.position - Screen position
+ * @param {Function} props.onClose - Callback when closed
+ */
 const Snackbar = ({
   type = "success",
   message = "This is a notification!",
@@ -97,7 +108,8 @@ const Snackbar = ({
     "bottom-right": "bottom-6 right-6 animate-slide-in-right",
     "bottom-left": "bottom-6 left-6 animate-slide-in-left",
     "top-center": "top-6 left-1/2 -translate-x-1/2 animate-slide-in-top",
-    "bottom-center": "bottom-6 left-1/2 -translate-x-1/2 animate-slide-in-bottom",
+    "bottom-center":
+      "bottom-6 left-1/2 -translate-x-1/2 animate-slide-in-bottom",
   };
 
   return (
@@ -105,7 +117,9 @@ const Snackbar = ({
       role="alert"
       aria-live="assertive"
       className={`fixed z-50 ${positionStyles[position]} ${
-        visible ? "visible opacity-100 scale-100" : "invisible opacity-0 scale-95"
+        visible
+          ? "visible opacity-100 scale-100"
+          : "invisible opacity-0 scale-95"
       } transition-all duration-300 ease-out`}
     >
       <div
@@ -119,7 +133,7 @@ const Snackbar = ({
 
         <div className="flex items-start gap-3">
           <div className="shrink-0 pt-0.5">{typeStyles[type].icon}</div>
-          
+
           <div className="flex-1 text-white">
             <p className="text-sm font-medium leading-tight pr-6">{message}</p>
           </div>

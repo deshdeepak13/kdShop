@@ -1,6 +1,13 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 
+/**
+ * Form component for entering shipping address details.
+ *
+ * @param {Object} props - Component props
+ * @param {Function} props.onSave - Callback when form is saved
+ * @param {Function} props.onCancel - Callback when form is cancelled
+ */
 const AddressForm = ({ onSave, onCancel }) => {
   const {
     register,
@@ -43,7 +50,9 @@ const AddressForm = ({ onSave, onCancel }) => {
           })}
           className="border border-gray-600 p-3 w-full bg-gray-800 text-white rounded-lg"
         />
-        {errors.mobile && <p className="text-red-600">{errors.mobile.message}</p>}
+        {errors.mobile && (
+          <p className="text-red-600">{errors.mobile.message}</p>
+        )}
       </div>
 
       {/* Pincode Field */}
@@ -59,7 +68,9 @@ const AddressForm = ({ onSave, onCancel }) => {
           })}
           className="border border-gray-600 p-3 w-full bg-gray-800 text-white rounded-lg"
         />
-        {errors.pincode && <p className="text-red-600">{errors.pincode.message}</p>}
+        {errors.pincode && (
+          <p className="text-red-600">{errors.pincode.message}</p>
+        )}
       </div>
 
       {/* Address Fields */}
@@ -69,7 +80,9 @@ const AddressForm = ({ onSave, onCancel }) => {
           {...register("locality", { required: "Locality is required" })}
           className="border border-gray-600 p-3 w-full bg-gray-800 text-white rounded-lg"
         />
-        {errors.locality && <p className="text-red-600">{errors.locality.message}</p>}
+        {errors.locality && (
+          <p className="text-red-600">{errors.locality.message}</p>
+        )}
       </div>
 
       <div>
@@ -78,7 +91,9 @@ const AddressForm = ({ onSave, onCancel }) => {
           {...register("address", { required: "Address is required" })}
           className="border border-gray-600 p-3 w-full bg-gray-800 text-white rounded-lg"
         />
-        {errors.address && <p className="text-red-600">{errors.address.message}</p>}
+        {errors.address && (
+          <p className="text-red-600">{errors.address.message}</p>
+        )}
       </div>
 
       {/* City and State Fields */}

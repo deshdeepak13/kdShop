@@ -1,10 +1,14 @@
 // LogoutButton.js
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { logout } from '../redux/authSlice'; // Adjust the import path as needed
-import { useNavigate } from 'react-router-dom';
-import { useSnackbar } from './SnackbarProvider';
+import React from "react";
+import { useDispatch } from "react-redux";
+import { logout } from "../redux/authSlice"; // Adjust the import path as needed
+import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "./SnackbarProvider";
 
+/**
+ * Logout button component.
+ * Handles user logout logic and redirection.
+ */
 const Logout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -12,17 +16,14 @@ const Logout = () => {
 
   const handleLogout = () => {
     dispatch(logout()); // Reset the Redux store
-    localStorage.removeItem('token'); // Clear JWT or token
+    localStorage.removeItem("token"); // Clear JWT or token
     navigate("/");
-    addSnackbar({message:`Logged Out successfully!`,type:"logout"});
+    addSnackbar({ message: `Logged Out successfully!`, type: "logout" });
     // window.location.href = '/login'; // Optionally redirect to login or home page
   };
 
   return (
-    <span
-      onClick={handleLogout}
-      className="hover:text-white transition-colors"
-    >
+    <span onClick={handleLogout} className="hover:text-white transition-colors">
       Logout
     </span>
   );

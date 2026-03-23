@@ -12,6 +12,11 @@ const router = express.Router();
 // -------------------
 // Create New Order
 // -------------------
+/**
+ * @route POST /api/v1/orders
+ * @desc Create a new order
+ * @access Private
+ */
 router.post("/", verifyTokenMiddleware, async (req, res) => {
   try {
     const { items, shippingAddress, totalAmount, paymentId } = req.body;
@@ -89,10 +94,15 @@ router.post("/", verifyTokenMiddleware, async (req, res) => {
 // -------------------
 // Get All Orders for Admin
 // -------------------
+/**
+ * @route GET /api/v1/orders
+ * @desc Get all orders (Admin)
+ * @access Private
+ */
 router.get("/", verifyTokenMiddleware, async (req, res) => {
   try {
     // Fetch all orders (admin use case)
-    const orders = await Order.find({}).populate("userId", "name email").sort({ createdAt: -1 });
+    const orders = await Order.find({}).populate("user", "name email").sort({ createdAt: -1 });
     res.status(200).json(orders);
   } catch (error) {
     console.error("Get Orders Error:", error.message);
@@ -103,6 +113,11 @@ router.get("/", verifyTokenMiddleware, async (req, res) => {
 // -------------------
 // Get User-Specific Orders
 // -------------------
+/**
+ * @route GET /api/v1/orders/my-orders
+ * @desc Get logged-in user's orders
+ * @access Private
+ */
 router.get("/my-orders", verifyTokenMiddleware, async (req, res) => {
   try {
     const userOrders = await Order.aggregate([
@@ -163,11 +178,16 @@ router.get("/my-orders", verifyTokenMiddleware, async (req, res) => {
 // -------------------
 // Update Order Status (Admin Only)
 // -------------------
+/**
+ * @route PUT /api/v1/orders/:_id
+ * @desc Update order status
+ * @access Private (Admin)
+ */
 router.put("/:_id", verifyTokenMiddleware, async (req, res) => {
   const { status } = req.body;
 
   try {
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params._id);
 
     if (!order) {
       return res.status(404).json({ error: "Order not found." });
@@ -187,9 +207,14 @@ router.put("/:_id", verifyTokenMiddleware, async (req, res) => {
 // -------------------
 // Delete an Order (Admin Only)
 // -------------------
+/**
+ * @route DELETE /api/v1/orders/:_id
+ * @desc Delete an order
+ * @access Private (Admin)
+ */
 router.delete("/:_id", verifyTokenMiddleware, async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params._id);
 
     if (!order) {
       return res.status(404).json({ error: "Order not found." });

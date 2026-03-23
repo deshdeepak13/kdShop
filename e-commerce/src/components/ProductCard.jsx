@@ -6,11 +6,26 @@ import { addItemToCart } from "../redux/cartSlice";
 import { addToWishlist, removeFromWishlist } from "../redux/wishlistSlice";
 import { useSnackbar } from "./SnackbarProvider";
 
-const ProductCard = ({ id, name, price, originalPrice, discount, imageUrl, stock, isWishlisted }) => {
+/**
+ * Card component displaying product details.
+ * features Add to Cart and Wishlist toggle functionality.
+ *
+ * @param {Object} props - Product details
+ */
+const ProductCard = ({
+  id,
+  name,
+  price,
+  originalPrice,
+  discount,
+  imageUrl,
+  stock,
+  isWishlisted,
+}) => {
   const dispatch = useDispatch();
   const { isLoggedIn, user } = useSelector((state) => state.auth);
   const token = useSelector((state) => state.auth.token);
-  const addSnackbar  = useSnackbar();
+  const addSnackbar = useSnackbar();
 
   // Handle Add to Cart
   const handleAddToCart = () => {
@@ -85,16 +100,16 @@ const ProductCard = ({ id, name, price, originalPrice, discount, imageUrl, stock
             key="discount-ribbon"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            exit={{ scale: 0,opacity:0 }}
+            exit={{ scale: 0, opacity: 0 }}
             className="absolute z-40 top-5 left-2 bg-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md"
           >
-            {discount}% OFF 
+            {discount}% OFF
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* Product Image with Hover Animation */}
-      <motion.div 
+      <motion.div
         className="relative w-full h-40 bg-gray-700 flex items-center justify-center"
         whileHover={{ scale: 1.05 }}
       >
@@ -113,14 +128,16 @@ const ProductCard = ({ id, name, price, originalPrice, discount, imageUrl, stock
 
         {/* Price Section */}
         <div className="mt-2 flex items-center space-x-2">
-          <motion.p 
+          <motion.p
             className="text-lg font-bold text-gray-100"
             whileHover={{ scale: 1.05 }}
           >
             ₹{price}
           </motion.p>
           {discount && (
-            <p className="text-xs line-through text-gray-400">₹{originalPrice}</p>
+            <p className="text-xs line-through text-gray-400">
+              ₹{originalPrice}
+            </p>
           )}
         </div>
 
@@ -165,7 +182,7 @@ const ProductCard = ({ id, name, price, originalPrice, discount, imageUrl, stock
                 animate={{ scale: 1 }}
                 exit={{ scale: 0 }}
               >
-                <Heart 
+                <Heart
                   size={20}
                   fill={isWishlisted ? "currentColor" : "none"}
                 />

@@ -1,3 +1,6 @@
+/**
+ * Footer component displaying company info, quick links, and social media.
+ */
 export default function Footer() {
   return (
     <footer className="bg-gray-900 text-white py-10 animate-fade-in-up">
@@ -10,10 +13,11 @@ export default function Footer() {
               <span className="text-purple-500">{"/>"}</span>
             </span>
             <div className="mt-5">
-            <h2 className="text-lg font-semibold mb-4">About Us</h2>
-            <p className="text-gray-400 text-sm transition-all duration-300 hover:text-white">
-              We provide high-quality products with excellent customer service.
-            </p>
+              <h2 className="text-lg font-semibold mb-4">About Us</h2>
+              <p className="text-gray-400 text-sm transition-all duration-300 hover:text-white">
+                We provide high-quality products with excellent customer
+                service.
+              </p>
             </div>
           </div>
 
@@ -120,7 +124,8 @@ export default function Footer() {
         <div className="mt-8 border-t border-gray-700 pt-6 flex flex-col md:flex-row items-center justify-between text-sm text-gray-400">
           <p className="mb-4 md:mb-0 animate-fade-in">
             &copy; {new Date().getFullYear()} {"<ddDev"}
-            <span className="text-purple-500">{"/"}</span>{">"} All rights reserved.
+            <span className="text-purple-500">{"/"}</span>
+            {">"} All rights reserved.
           </p>
           <div className="flex space-x-4">
             {["Facebook", "Twitter", "Instagram", "LinkedIn"].map(
@@ -138,8 +143,6 @@ export default function Footer() {
           </div>
         </div>
       </div>
-
-      
     </footer>
   );
 }

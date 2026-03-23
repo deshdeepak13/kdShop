@@ -12,6 +12,11 @@ const app = express.Router();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // Create a payment intent
+/**
+ * @route POST /api/v1/payments/create-payment-intent
+ * @desc Create Stripe payment intent
+ * @access Private
+ */
 app.post('/create-payment-intent',authMiddleware, async (req, res) => {
     try {
         const { amount, currency } = req.body;

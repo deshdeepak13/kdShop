@@ -1,16 +1,18 @@
+import 'dotenv/config';
 import express from 'express';
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import cors from 'cors'
+import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from "url";
+import helmet from 'helmet';
+import compression from 'compression';
+import rateLimit from 'express-rate-limit';
 
 // Define __dirname in an ES module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Initialize environment variables
-dotenv.config();
+// Initialize environment variables (already done via import 'dotenv/config')
 
 // console.log(process.env.MONGO_URI)
 import userRoute from "./src/routes/user.js";
@@ -29,6 +31,23 @@ import chatRoute from "./src/routes/chat.js";
 // Initialize Express
 const app = express();
 
+// Security Middleware
+// app.use(helmet());
+// app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
+
+// Performance Middleware
+// app.use(compression());
+
+// Rate Limiting (100 requests per 15 mins)
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, 
+  max: 100, 
+  standardHeaders: true,
+  legacyHeaders: false, 
+  message: 'Too many requests from this IP, please try again after 15 minutes',
+});
+app.use('/api', limiter);
+
 // Middleware to parse JSON
 app.use(cors());
 app.use(express.json());
@@ -39,11 +58,8 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 // Connect to MongoDB
-const dbURI = process.env.MONGO_URI;
-mongoose.connect(dbURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+const dbURI = process.env.MONGODB_URI;
+mongoose.connect(dbURI)
 .then(() => console.log('Connected to MongoDB'))
 .catch((err) => console.error('MongoDB connection error:', err));
 
@@ -65,6 +81,11 @@ app.use("/api/v1/chat", chatRoute);
 // app.use("/api/v1/dashboard", dashboardRoute);
 
 
+// Error Handling Middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: 'Something went wrong!' });
+});
 
 // Start the server
 const PORT = process.env.PORT || 3000;

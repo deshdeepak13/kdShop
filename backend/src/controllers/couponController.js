@@ -1,6 +1,17 @@
 import Coupon from '../models/couponSchema.js';
 
 // Validate a coupon
+/**
+ * Validates a coupon code.
+ * 
+ * @async
+ * @function validateCoupon
+ * @param {Object} req - Express request object
+ * @param {Object} req.body - Request body
+ * @param {string} req.body.couponCode - The coupon code to validate
+ * @param {Object} res - Express response object
+ * @returns {Promise<void>} JSON response indicating validity and discount details.
+ */
 export const validateCoupon = async (req, res) => {
   const { couponCode } = req.body;
 //   console.log("fk u")
@@ -36,6 +47,15 @@ export const validateCoupon = async (req, res) => {
 };
 
 // Get all coupons
+/**
+ * Retrieves all coupons.
+ * 
+ * @async
+ * @function getCoupons
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @returns {Promise<void>} JSON response containing a list of all coupons.
+ */
 export const getCoupons = async (req, res) => {
   try {
     const coupons = await Coupon.find(); // Retrieve all coupons
@@ -47,6 +67,19 @@ export const getCoupons = async (req, res) => {
 };
 
 // Add a new coupon
+/**
+ * Adds a new coupon.
+ * 
+ * @async
+ * @function addCoupon
+ * @param {Object} req - Express request object
+ * @param {Object} req.body - Request body
+ * @param {string} req.body.couponCode - The code for the new coupon
+ * @param {number} req.body.discount - Discount percentage
+ * @param {Date} req.body.expiryDate - Expiration date of the coupon
+ * @param {Object} res - Express response object
+ * @returns {Promise<void>} JSON response confirming creation or reporting error.
+ */
 export const addCoupon = async (req, res) => {
   const { couponCode, discount, expiryDate } = req.body;
   

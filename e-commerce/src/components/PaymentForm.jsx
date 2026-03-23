@@ -1,17 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { loadStripe } from "@stripe/stripe-js";
-import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import {
+  Elements,
+  CardElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { clearCartFromBackend } from "../redux/cartSlice";
 import { useSnackbar } from "./SnackbarProvider";
 
-
 // Load Stripe with your publishable key
 const stripePublicKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
 const stripePromise = loadStripe(stripePublicKey);
 
+/**
+ * Stripe Payment Form component.
+ * Handles card input and payment confirmation.
+ *
+ * @param {Object} props - Component props
+ * @param {number} props.totalAmount - Total transaction amount
+ * @param {Function} props.onClose - Callback to close the modal
+ * @param {Object} props.address - Shipping address details
+ */
 const CheckoutForm = ({ totalAmount, onClose, address }) => {
   const addSnackbar = useSnackbar();
   const stripe = useStripe();
@@ -76,29 +89,34 @@ const CheckoutForm = ({ totalAmount, onClose, address }) => {
 
     try {
       const { data } = await axios.post(
-        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/payments/create-payment-intent`, 
+        `${
+          import.meta.env.VITE_REACT_APP_BACKEND_BASEURL
+        }/api/v1/payments/create-payment-intent`,
         {
           amount: totalAmount * 100,
-          currency: 'inr',
+          currency: "inr",
           orderItems: cartItems.map((item) => ({
             productId: item.product._id,
             quantity: item.quantity,
           })),
-        }, 
+        },
         {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
 
       const cardElement = elements.getElement(CardElement);
-      const { error, paymentIntent } = await stripe.confirmCardPayment(data.clientSecret, {
-        payment_method: {
-          card: cardElement,
-          billing_details: {
-            name: "Cardholder Name",
+      const { error, paymentIntent } = await stripe.confirmCardPayment(
+        data.clientSecret,
+        {
+          payment_method: {
+            card: cardElement,
+            billing_details: {
+              name: "Cardholder Name",
+            },
           },
-        },
-      });
+        }
+      );
 
       if (error) {
         setError(error.message);
@@ -113,10 +131,13 @@ const CheckoutForm = ({ totalAmount, onClose, address }) => {
       setTimeout(() => {
         navigate("/");
       }, 1000);
-      addSnackbar({message:`Order Placed Successfully !!!`,type:"payment-successful"});
+      addSnackbar({
+        message: `Order Placed Successfully !!!`,
+        type: "payment-successful",
+      });
     } catch (err) {
       setError("Payment failed. Please try again.");
-      addSnackbar({message:`${error}`,type:"error"});
+      addSnackbar({ message: `${error}`, type: "error" });
       // console.error("Payment error:", err);
     }
 
@@ -154,8 +175,12 @@ const CheckoutForm = ({ totalAmount, onClose, address }) => {
 };
 
 const PaymentModal = ({ totalAmount, onClose, address }) => (
-  <Elements stripe={stripePromise}> 
-    <CheckoutForm totalAmount={totalAmount} onClose={onClose} address={address} />
+  <Elements stripe={stripePromise}>
+    <CheckoutForm
+      totalAmount={totalAmount}
+      onClose={onClose}
+      address={address}
+    />
   </Elements>
 );
 

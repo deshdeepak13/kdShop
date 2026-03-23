@@ -8,6 +8,10 @@ const initialState = {
   error: null, // Error state
 };
 
+/**
+ * Redux slice for wishlist management.
+ * Handles fetching, adding, and removing wishlist items.
+ */
 const wishlistSlice = createSlice({
   name: "wishlist",
   initialState,

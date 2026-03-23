@@ -1,11 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { updateCartItemQuantity, removeItemFromCart } from "../redux/cartSlice";
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 import { FiPlus, FiMinus, FiTrash2 } from "react-icons/fi";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
+/**
+ * Individual item in the cart.
+ * Displays product image, details, price, and quantity controls.
+ *
+ * @param {Object} props - Component props
+ * @param {Object} props.product - The product object
+ * @param {number} props.quantity - Current quantity of the product
+ * @param {Function} props.onQuantityChange - Callback for quantity changes
+ */
 const CartItem = ({ product, quantity, onQuantityChange }) => {
   const dispatch = useDispatch();
   const { _id, name, imageUrl, stock, discount, MRP, currentPrice } = product;
@@ -13,35 +22,61 @@ const CartItem = ({ product, quantity, onQuantityChange }) => {
   const [loading, setLoading] = useState(false);
   const [imageError, setImageError] = useState(false);
 
-  const handleQuantityChange = async (newQuantity) => {
-    if (newQuantity === quantity || newQuantity < 1 || newQuantity > stock) return;
-    
-    setLoading(true);
-    try {
-      await dispatch(updateCartItemQuantity(token, user.id, _id, newQuantity))//.unwrap();
-      onQuantityChange(_id, newQuantity);
-      window.location.reload();
-    } finally {
-      setLoading(false);
-    }
+  // Get actual quantity from Redux to verify if an update is needed
+  const cartItemFromStore = useSelector((state) =>
+    state.cart.cartItems.find((item) => item.product._id === _id)
+  );
+  const reduxQuantity = cartItemFromStore
+    ? cartItemFromStore.quantity
+    : quantity;
+
+  // Local state for immediate UI feedback
+  const [localQuantity, setLocalQuantity] = useState(quantity);
+
+  // Sync local quantity if props change (e.g. from backend)
+  useEffect(() => {
+    setLocalQuantity(quantity);
+  }, [quantity]);
+
+  // Debounce logic
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      // Only dispatch if local quantity differs from Redux/Prop quantity
+      if (
+        localQuantity !== reduxQuantity &&
+        localQuantity > 0 &&
+        localQuantity <= stock
+      ) {
+        dispatch(updateCartItemQuantity(token, user.id, _id, localQuantity));
+        // No reload needed, Redux handles state
+      }
+    }, 500); // 500ms debounce
+
+    return () => clearTimeout(timer);
+  }, [localQuantity, reduxQuantity, dispatch, token, user.id, _id, stock]);
+
+  const handleQuantityChange = (newQuantity) => {
+    if (newQuantity < 1 || newQuantity > stock) return;
+    setLocalQuantity(newQuantity);
+    onQuantityChange(_id, newQuantity); // Update parent state immediately for total calculation
   };
 
   const handleRemove = async () => {
     setLoading(true);
     try {
-      await dispatch(removeItemFromCart(token, user.id, _id))//.unwrap();
+      await dispatch(removeItemFromCart(token, user.id, _id));
     } finally {
       setLoading(false);
     }
   };
 
-  const formatPrice = (price) => new Intl.NumberFormat('en-IN').format(price);
+  const formatPrice = (price) => new Intl.NumberFormat("en-IN").format(price);
 
   return (
     <div className="flex flex-col md:flex-row items-center bg-gray-800 rounded-lg p-4 mb-4 border border-gray-700 hover:bg-gray-750 transition-colors group relative">
-      {/* Loading overlay */}
+      {/* Loading overlay for remove action only */}
       {loading && (
-        <div className="absolute inset-0 bg-gray-900/50 flex items-center justify-center rounded-lg">
+        <div className="absolute inset-0 bg-gray-900/50 flex items-center justify-center rounded-lg z-10">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
         </div>
       )}
@@ -81,7 +116,9 @@ const CartItem = ({ product, quantity, onQuantityChange }) => {
             </>
           )}
         </div>
-        <p className="text-sm text-gray-400 mt-2 line-clamp-2">{product.description}</p>
+        <p className="text-sm text-gray-400 mt-2 line-clamp-2">
+          {product.description}
+        </p>
       </div>
 
       {/* Quantity and Actions */}
@@ -89,25 +126,25 @@ const CartItem = ({ product, quantity, onQuantityChange }) => {
         {/* Quantity Controls */}
         <div className="flex items-center gap-3 bg-gray-700 px-4 py-2 rounded-lg">
           <button
-            onClick={() => handleQuantityChange(quantity - 1)}
-            disabled={quantity <= 1 || loading}
+            onClick={() => handleQuantityChange(localQuantity - 1)}
+            disabled={localQuantity <= 1 || loading}
             className={`p-1.5 rounded-lg hover:bg-gray-600 transition-colors ${
-              quantity <= 1 ? "opacity-50 cursor-not-allowed" : ""
+              localQuantity <= 1 ? "opacity-50 cursor-not-allowed" : ""
             }`}
             aria-label="Decrease quantity"
           >
             <FiMinus size={18} className="text-gray-300" />
           </button>
-          
+
           <span className="text-lg font-medium text-white w-8 text-center">
-            {loading ? <Skeleton width={24} /> : quantity}
+            {localQuantity}
           </span>
-          
+
           <button
-            onClick={() => handleQuantityChange(quantity + 1)}
-            disabled={quantity >= stock || loading}
+            onClick={() => handleQuantityChange(localQuantity + 1)}
+            disabled={localQuantity >= stock || loading}
             className={`p-1.5 rounded-lg hover:bg-gray-600 transition-colors ${
-              quantity >= stock ? "opacity-50 cursor-not-allowed" : ""
+              localQuantity >= stock ? "opacity-50 cursor-not-allowed" : ""
             }`}
             aria-label="Increase quantity"
           >

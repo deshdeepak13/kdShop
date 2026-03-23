@@ -3,6 +3,10 @@ import multer from 'multer';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import cloudinary from '../utils/cloudinary.js';
 
+/**
+ * Multer storage configuration for User profile photos.
+ * Uploads to 'ddShop/users' folder in Cloudinary.
+ */
 const storage = new CloudinaryStorage({
   cloudinary,
   params: {

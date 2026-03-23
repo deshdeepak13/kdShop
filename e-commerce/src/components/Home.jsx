@@ -7,6 +7,10 @@ import { useSelector } from "react-redux";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
+/**
+ * Home page component.
+ * Displays banner carousel and featured products list.
+ */
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -17,9 +21,16 @@ const Home = () => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/products`
+          `${
+            import.meta.env.VITE_REACT_APP_BACKEND_BASEURL
+          }/api/v1/products?limit=100`
         );
-        setProducts(response.data);
+        // Handle new response format { products, totalPages }
+        if (response.data.products) {
+          setProducts(response.data.products);
+        } else {
+          setProducts(response.data);
+        }
         console.log("Products fetched successfully:", response.data);
         setError(null);
       } catch (error) {
@@ -62,8 +73,12 @@ const Home = () => {
                 loading="lazy"
               />
               <div className="legend bg-gray-900/80 p-4 rounded-lg">
-                <h2 className="text-xl md:text-3xl font-bold mb-2">New Collection 2024</h2>
-                <p className="text-gray-300 md:text-lg">Up to 50% off selected items</p>
+                <h2 className="text-xl md:text-3xl font-bold mb-2">
+                  New Collection 2024
+                </h2>
+                <p className="text-gray-300 md:text-lg">
+                  Up to 50% off selected items
+                </p>
               </div>
             </div>
           ))}
@@ -72,8 +87,10 @@ const Home = () => {
 
       {/* Product Section */}
       <section className="product-section px-4 md:px-8 lg:px-16 py-12">
-        <h2 className="text-2xl md:text-3xl font-bold text-white mb-8">Featured Products</h2>
-        
+        <h2 className="text-2xl md:text-3xl font-bold text-white mb-8">
+          Featured Products
+        </h2>
+
         {error ? (
           <div className="text-center py-8">
             <p className="text-red-400 text-lg mb-4">{error}</p>
@@ -98,14 +115,14 @@ const Home = () => {
                 const isWishlisted = wishlist.some(
                   (item) => item.id === product._id
                 );
-                const imageUrl = product.imageUrl?.[0] 
-                  ? product.imageUrl[0].startsWith('http') 
+                const imageUrl = product.imageUrl?.[0]
+                  ? product.imageUrl[0].startsWith("http")
                     ? product.imageUrl[0]
                     : `${product.imageUrl[0]}`
                   : "/default-product.jpg";
 
                 return (
-                  <ProductCard 
+                  <ProductCard
                     key={product._id}
                     id={product._id}
                     name={product.name}

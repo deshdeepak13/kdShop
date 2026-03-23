@@ -1,15 +1,23 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import Logout from "./Logout";
-import { 
-  FiPackage, 
-  FiHeart, 
-  FiUser, 
-  FiTag, 
+import {
+  FiPackage,
+  FiHeart,
+  FiUser,
+  FiTag,
   FiLogOut,
-  FiChevronDown 
-} from 'react-icons/fi';
+  FiChevronDown,
+} from "react-icons/fi";
 
+/**
+ * Dropdown menu for user profile actions (Orders, Wishlist, etc.).
+ *
+ * @param {Object} props - Component props
+ * @param {string} props.title - Menu title (usually user name)
+ * @param {string} props.initials - User initials for avatar
+ * @param {boolean} props.mobile - Whether displaying in mobile view
+ */
 const DropdownMenu = ({ title, initials, mobile }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -33,7 +41,11 @@ const DropdownMenu = ({ title, initials, mobile }) => {
             <span className="bg-purple-500 text-white rounded-full h-8 w-8 flex items-center justify-center text-sm ml-2 md:hidden">
               {initials}
             </span>
-            <FiChevronDown className={`ml-1 transform transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+            <FiChevronDown
+              className={`ml-1 transform transition-transform ${
+                isOpen ? "rotate-180" : ""
+              }`}
+            />
           </>
         )}
       </button>
@@ -48,7 +60,9 @@ const DropdownMenu = ({ title, initials, mobile }) => {
               onClick={closeDropdown}
               className={({ isActive }) =>
                 `flex items-center px-4 py-2 text-sm space-x-2 ${
-                  isActive ? 'bg-purple-600 text-white' : 'text-gray-300 hover:bg-gray-800'
+                  isActive
+                    ? "bg-purple-600 text-white"
+                    : "text-gray-300 hover:bg-gray-800"
                 }`
               }
             >
@@ -61,7 +75,9 @@ const DropdownMenu = ({ title, initials, mobile }) => {
               onClick={closeDropdown}
               className={({ isActive }) =>
                 `flex items-center px-4 py-2 text-sm space-x-2 ${
-                  isActive ? 'bg-purple-600 text-white' : 'text-gray-300 hover:bg-gray-800'
+                  isActive
+                    ? "bg-purple-600 text-white"
+                    : "text-gray-300 hover:bg-gray-800"
                 }`
               }
             >
@@ -74,7 +90,9 @@ const DropdownMenu = ({ title, initials, mobile }) => {
               onClick={closeDropdown}
               className={({ isActive }) =>
                 `flex items-center px-4 py-2 text-sm space-x-2 ${
-                  isActive ? 'bg-purple-600 text-white' : 'text-gray-300 hover:bg-gray-800'
+                  isActive
+                    ? "bg-purple-600 text-white"
+                    : "text-gray-300 hover:bg-gray-800"
                 }`
               }
             >
@@ -87,7 +105,9 @@ const DropdownMenu = ({ title, initials, mobile }) => {
               onClick={closeDropdown}
               className={({ isActive }) =>
                 `flex items-center px-4 py-2 text-sm space-x-2 ${
-                  isActive ? 'bg-purple-600 text-white' : 'text-gray-300 hover:bg-gray-800'
+                  isActive
+                    ? "bg-purple-600 text-white"
+                    : "text-gray-300 hover:bg-gray-800"
                 }`
               }
             >
@@ -95,12 +115,13 @@ const DropdownMenu = ({ title, initials, mobile }) => {
               <span>Coupons</span>
             </NavLink>
 
-
             {/* Fixed Logout item */}
-            <div className="flex items-center px-4 py-2 text-sm space-x-2 text-gray-300 hover:bg-red-500 cursor-pointer" 
-            onClick={closeDropdown}>
+            <div
+              className="flex items-center px-4 py-2 text-sm space-x-2 text-gray-300 hover:bg-red-500 cursor-pointer"
+              onClick={closeDropdown}
+            >
               <FiLogOut className="text-lg" />
-              <Logout/>
+              <Logout />
             </div>
           </div>
         </div>

@@ -1,20 +1,34 @@
-import React, { useState } from 'react';
-import { NavLink, Link } from 'react-router-dom';
-import DropdownMenu from './DropDownMenu';
-import { useSelector } from 'react-redux';
-import { FaHome, FaSearch, FaShoppingCart, FaBars, FaTimes } from 'react-icons/fa';
-import { FiLogIn, FiUserPlus } from 'react-icons/fi';
+import React, { useState } from "react";
+import { NavLink, Link } from "react-router-dom";
+import DropdownMenu from "./DropDownMenu";
+import { useSelector } from "react-redux";
+import {
+  FaHome,
+  FaSearch,
+  FaShoppingCart,
+  FaBars,
+  FaTimes,
+} from "react-icons/fa";
+import { FiLogIn, FiUserPlus } from "react-icons/fi";
 
+/**
+ * Responsive Navigation Bar.
+ * Handles desktop/mobile menus, auth state, and navigation links.
+ *
+ * @param {Object} props - Component props
+ * @param {Function} props.openLogin - Callback to open login modal
+ * @param {Function} props.openSignup - Callback to open signup modal
+ */
 const Navbar = ({ openLogin, openSignup }) => {
   const { isLoggedIn, user } = useSelector((state) => state.auth);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const getInitials = (name) => {
     return name
-      .split(' ')
+      .split(" ")
       .slice(0, 2)
-      .map(n => n[0])
-      .join('')
+      .map((n) => n[0])
+      .join("")
       .toUpperCase();
   };
 
@@ -37,7 +51,7 @@ const Navbar = ({ openLogin, openSignup }) => {
               to="/"
               className={({ isActive }) =>
                 `flex items-center space-x-1 text-white hover:text-purple-300 transition-colors ${
-                  isActive ? 'text-purple-300' : ''
+                  isActive ? "text-purple-300" : ""
                 }`
               }
             >
@@ -49,7 +63,7 @@ const Navbar = ({ openLogin, openSignup }) => {
               to="/search"
               className={({ isActive }) =>
                 `flex items-center space-x-1 text-white hover:text-purple-300 transition-colors ${
-                  isActive ? 'text-purple-300' : ''
+                  isActive ? "text-purple-300" : ""
                 }`
               }
             >
@@ -63,7 +77,7 @@ const Navbar = ({ openLogin, openSignup }) => {
                   to="/cart"
                   className={({ isActive }) =>
                     `flex items-center space-x-1 text-white hover:text-purple-300 transition-colors ${
-                      isActive ? 'text-purple-300' : ''
+                      isActive ? "text-purple-300" : ""
                     }`
                   }
                 >
@@ -122,7 +136,7 @@ const Navbar = ({ openLogin, openSignup }) => {
                 onClick={() => setIsMenuOpen(false)}
                 className={({ isActive }) =>
                   `flex items-center space-x-2 text-white px-3 py-2 rounded-lg ${
-                    isActive ? 'bg-purple-600' : 'hover:bg-gray-800'
+                    isActive ? "bg-purple-600" : "hover:bg-gray-800"
                   }`
                 }
               >
@@ -135,7 +149,7 @@ const Navbar = ({ openLogin, openSignup }) => {
                 onClick={() => setIsMenuOpen(false)}
                 className={({ isActive }) =>
                   `flex items-center space-x-2 text-white px-3 py-2 rounded-lg ${
-                    isActive ? 'bg-purple-600' : 'hover:bg-gray-800'
+                    isActive ? "bg-purple-600" : "hover:bg-gray-800"
                   }`
                 }
               >
@@ -150,7 +164,7 @@ const Navbar = ({ openLogin, openSignup }) => {
                     onClick={() => setIsMenuOpen(false)}
                     className={({ isActive }) =>
                       `flex items-center space-x-2 text-white px-3 py-2 rounded-lg ${
-                        isActive ? 'bg-purple-600' : 'hover:bg-gray-800'
+                        isActive ? "bg-purple-600" : "hover:bg-gray-800"
                       }`
                     }
                   >

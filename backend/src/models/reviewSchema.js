@@ -1,6 +1,16 @@
 import mongoose from 'mongoose';
 
 // Define the Review Schema
+// Define the Review Schema
+/**
+ * Schema for Product Reviews.
+ * @typedef {Object} Review
+ * @property {string} message - The review text.
+ * @property {ObjectId} product - Reference to the Product being reviewed.
+ * @property {ObjectId} user - Reference to the User who wrote the review.
+ * @property {string} image - Optional image attached to the review.
+ * @property {number} rating - Rating given (0-5).
+ */
 const reviewSchema = new mongoose.Schema({
   message: {
     type: String,

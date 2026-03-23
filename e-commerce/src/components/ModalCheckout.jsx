@@ -2,6 +2,13 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import PaymentModal from "./PaymentForm"; // Stripe payment form component
 
+/**
+ * Modal for checkout process showing summary and payment form.
+ *
+ * @param {Object} props - Component props
+ * @param {Function} props.onClose - Callback to close modal
+ * @param {Object} props.address - Saved address details
+ */
 const Modal = ({ onClose, address }) => {
   const [isPayment, setIsPayment] = useState(false); // Tracks whether to show payment form
   const { cartItems } = useSelector((state) => state.cart);
@@ -31,8 +38,12 @@ const Modal = ({ onClose, address }) => {
                     alt={item.product.name}
                     className="w-16 h-16 object-contain rounded"
                   />
-                  <span className="text-lg">{item.product.name} x {item.quantity}</span>
-                  <span className="text-lg">₹{item.product.currentPrice * item.quantity}</span>
+                  <span className="text-lg">
+                    {item.product.name} x {item.quantity}
+                  </span>
+                  <span className="text-lg">
+                    ₹{item.product.currentPrice * item.quantity}
+                  </span>
                 </div>
               ))}
             </div>
@@ -61,7 +72,11 @@ const Modal = ({ onClose, address }) => {
           </>
         ) : (
           // Payment Gateway View
-          <PaymentModal totalAmount={totalAmount} onClose={onClose} address={address} />
+          <PaymentModal
+            totalAmount={totalAmount}
+            onClose={onClose}
+            address={address}
+          />
         )}
       </div>
     </div>

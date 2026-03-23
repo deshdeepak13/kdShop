@@ -2,6 +2,21 @@ import mongoose from 'mongoose';
 import validator from 'validator';
 
 // Define the User Schema
+// Define the User Schema
+/**
+ * Schema for Users.
+ * @typedef {Object} User
+ * @property {string} name - Full name of the user.
+ * @property {string} role - Role of the user (admin/user).
+ * @property {string} email - Unique email address.
+ * @property {Date} dob - Date of Birth.
+ * @property {string} photo - Profile photo URL.
+ * @property {string} password - Hashed password.
+ * @property {Array<ObjectId>} orders - List of Order IDs.
+ * @property {Array<ObjectId>} wishlist - List of Product IDs in wishlist.
+ * @property {Array<Object>} cartItems - List of items in cart with quantity.
+ * @property {number} age - Virtual field: calculated age.
+ */
 const userSchema = new mongoose.Schema({
   name: {
     type: String,

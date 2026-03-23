@@ -28,7 +28,11 @@ const router = express.Router();
 
 
 // POST request to add a new user
-// Signup route
+/**
+ * @route POST /api/v1/user/signup
+ * @desc Register a new user
+ * @access Public
+ */
 router.post('/signup', upload.single('photo'), [
   body('name').notEmpty().withMessage('Name is required'),
   body('gender').isIn(['male', 'female', 'other']).withMessage('Invalid gender'),
@@ -101,7 +105,11 @@ router.post('/signup', upload.single('photo'), [
 
 
 // POST request to login a user
-// Login route
+/**
+ * @route POST /api/v1/user/login
+ * @desc Authenticate user and return JWT token
+ * @access Public
+ */
 router.post('/login', [
   body('email').isEmail().withMessage('Invalid email'),
   body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
@@ -155,7 +163,11 @@ router.post('/login', [
 // export default router;
 
 
-// route for token verification
+/**
+ * @route POST /api/v1/user/verifyToken
+ * @desc Verify JWT token and return user details
+ * @access Public
+ */
 router.post('/verifyToken', async (req, res) => {
   const token = req.headers.authorization?.split(' ')[1]; // Extract token from header
 
@@ -187,6 +199,11 @@ router.post('/verifyToken', async (req, res) => {
 
 
 
+/**
+ * @route POST /api/v1/user/change-password
+ * @desc Change user password
+ * @access Private
+ */
 router.post("/change-password", verifyTokenMiddleware, async (req, res) => {
   const { currentPassword, newPassword } = req.body;
   const userId = req.user.id; // Extracted from the authenticated token
@@ -274,6 +291,11 @@ router.get("/", verifyTokenMiddleware, async (req, res) => {
 
 // GET /api/v1/orders/transactions
 // Fetch transactions for a specific user
+/**
+ * @route GET /api/v1/user/transactions
+ * @desc Get user's order transactions
+ * @access Private
+ */
 router.get("/transactions", verifyTokenMiddleware, async (req, res) => {
 
   try {
@@ -293,6 +315,11 @@ router.get("/transactions", verifyTokenMiddleware, async (req, res) => {
 
 
 // Route to get user's cart with product details  
+/**
+ * @route GET /api/v1/user/:userId/cart
+ * @desc Get user's cart details
+ * @access Private
+ */
 router.get('/:userId/cart',verifyTokenMiddleware, async (req, res) => {
     try {
       const { userId } = req.params;
@@ -324,6 +351,11 @@ router.get('/:userId/cart',verifyTokenMiddleware, async (req, res) => {
 
 
 // Add an item to the cart
+/**
+ * @route POST /api/v1/user/:userId/cart/add
+ * @desc Add item to cart
+ * @access Private
+ */
 router.post('/:userId/cart/add', verifyTokenMiddleware, async (req, res) => {
   const userId = req.user.id; // Extracted from verifyTokenMiddleware
   const { productId, quantity } = req.body;
@@ -350,6 +382,12 @@ router.post('/:userId/cart/add', verifyTokenMiddleware, async (req, res) => {
 
     await user.save();
 
+    // Populate the cart items before sending response
+    await user.populate({
+      path: 'cartItems.product',
+      select: 'name description MRP discount stock imageUrl',
+    });
+
     res.status(200).json({
       message: 'Item added to cart successfully',
       cart: user.cartItems,
@@ -364,7 +402,12 @@ router.post('/:userId/cart/add', verifyTokenMiddleware, async (req, res) => {
 
 
 // Update the quantity of an item in the cart
-router.put('/:userId/cart/update', async (req, res) => {
+/**
+ * @route PUT /api/v1/user/:userId/cart/update
+ * @desc Update cart item quantity
+ * @access Private
+ */
+router.put('/:userId/cart/update', verifyTokenMiddleware, async (req, res) => {
   const { userId } = req.params;
   const { productId, quantity } = req.body;
 
@@ -389,6 +432,12 @@ router.put('/:userId/cart/update', async (req, res) => {
     // Save the updated user document
     await user.save();
 
+    // Populate the cart items before sending response
+    await user.populate({
+      path: 'cartItems.product',
+      select: 'name description MRP discount stock imageUrl',
+    });
+
     res.status(200).json({ message: 'Cart updated successfully', cart: user.cartItems });
   } catch (error) {
     console.error('Error updating cart:', error);
@@ -399,7 +448,12 @@ router.put('/:userId/cart/update', async (req, res) => {
 
 
 // Remove an item from the cart
-router.delete('/:userId/cart/remove/:productId', async (req, res) => {
+/**
+ * @route DELETE /api/v1/user/:userId/cart/remove/:productId
+ * @desc Remove item from cart
+ * @access Private
+ */
+router.delete('/:userId/cart/remove/:productId', verifyTokenMiddleware, async (req, res) => {
   const { userId, productId } = req.params;
 
   try {
@@ -416,6 +470,12 @@ router.delete('/:userId/cart/remove/:productId', async (req, res) => {
     // Save the updated user document
     await user.save();
 
+    // Populate the cart items before sending response
+    await user.populate({
+      path: 'cartItems.product',
+      select: 'name description MRP discount stock imageUrl',
+    });
+
     res.status(200).json({ message: 'Item removed from cart', cart: user.cartItems });
   } catch (error) {
     console.error('Error removing item from cart:', error);
@@ -424,6 +484,11 @@ router.delete('/:userId/cart/remove/:productId', async (req, res) => {
 });
 
 
+/**
+ * @route DELETE /api/v1/user/:userId/cart
+ * @desc Clear user's cart
+ * @access Private
+ */
 router.delete("/:userId/cart",verifyTokenMiddleware, async (req, res) => {
   const { userId } = req.params;
 

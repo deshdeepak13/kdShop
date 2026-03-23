@@ -4,12 +4,18 @@ import { fetchCartItems, setError } from "../redux/cartSlice"; // Import the act
 import { useNavigate } from "react-router-dom";
 import { FiCheckCircle, FiXCircle } from "react-icons/fi"; // Import icons
 
+/**
+ * Component to display order cost details.
+ * Shows subtotals, discounts, shipping charges, and total amount.
+ */
 const OrderSummary = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { token, user, isLoggedIn } = useSelector((state) => state.auth);
-  const { cartItems, discount, coupon, loading, error } = useSelector((state) => state.cart);
+  const { cartItems, discount, coupon, loading, error } = useSelector(
+    (state) => state.cart
+  );
 
   useEffect(() => {
     if (token && user?.id && !cartItems?.length) {
@@ -28,14 +34,23 @@ const OrderSummary = () => {
 
   // If cart is empty, show a message
   if (cartItems.length === 0) {
-    return <div className="text-center text-gray-600">Your cart is empty. Add some items first.</div>;
+    return (
+      <div className="text-center text-gray-600">
+        Your cart is empty. Add some items first.
+      </div>
+    );
   }
 
   // Calculate total items, total price, and other charges
-  const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
+  const totalItems = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
 
   const totalPrice = cartItems.reduce((total, item) => {
-    const price = item.product?.currentPrice ? Number(item.product.currentPrice) : 0;
+    const price = item.product?.currentPrice
+      ? Number(item.product.currentPrice)
+      : 0;
     return total + price * item.quantity;
   }, 0);
 
@@ -46,7 +61,10 @@ const OrderSummary = () => {
   let deliveryCharge = 0;
   if (finalAmountAfterDiscount < 500) {
     deliveryCharge = 80;
-  } else if (finalAmountAfterDiscount >= 500 && finalAmountAfterDiscount < 1000) {
+  } else if (
+    finalAmountAfterDiscount >= 500 &&
+    finalAmountAfterDiscount < 1000
+  ) {
     deliveryCharge = 50;
   } else {
     deliveryCharge = 10;
@@ -67,7 +85,8 @@ const OrderSummary = () => {
         </p>
         {discountAmount > 0 && (
           <p className="flex justify-between text-green-500">
-            <strong>Discount:</strong> <span>-₹{discountAmount.toFixed(2)}</span>
+            <strong>Discount:</strong>{" "}
+            <span>-₹{discountAmount.toFixed(2)}</span>
           </p>
         )}
         <p className="flex justify-between">
@@ -89,8 +108,12 @@ const OrderSummary = () => {
       <ul className="space-y-2">
         {cartItems.map((item) => (
           <li key={item.product._id} className="flex justify-between">
-            <span>{item.product.name} x {item.quantity}</span>
-            <span>₹{(item.product.currentPrice * item.quantity).toFixed(2)}</span>
+            <span>
+              {item.product.name} x {item.quantity}
+            </span>
+            <span>
+              ₹{(item.product.currentPrice * item.quantity).toFixed(2)}
+            </span>
           </li>
         ))}
       </ul>

@@ -2,11 +2,14 @@ import { useState } from "react";
 import { FaComments, FaRobot, FaPaperPlane } from "react-icons/fa";
 import ReactMarkdown from "react-markdown";
 
+/**
+ * AI-powered Chatbot component.
+ * Allows users to interact with a virtual assistant for support.
+ */
 const Chatbot = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -15,28 +18,29 @@ const Chatbot = () => {
     setInput("");
 
     try {
-      
-      const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-  messages: [
-    {
-      role: "system",
-      content: `You are a helpful, energetic...`, // (optional if handled backend)
-    },
-    ...messages.map((m) => ({
-      role: m.sender === "user" ? "user" : "assistant",
-      content: m.text,
-    })),
-    {
-      role: "user",
-      content: input,
-    },
-  ],
-}),
-
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/chat`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            messages: [
+              {
+                role: "system",
+                content: `You are a helpful, energetic...`, // (optional if handled backend)
+              },
+              ...messages.map((m) => ({
+                role: m.sender === "user" ? "user" : "assistant",
+                content: m.text,
+              })),
+              {
+                role: "user",
+                content: input,
+              },
+            ],
+          }),
+        }
+      );
       const data = await response.json();
       // setMessages([...newMessages, { sender: "bot", text: data.reply }]);
       const botMessages = data.replyChunks.map((chunk) => ({

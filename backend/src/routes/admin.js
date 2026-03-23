@@ -15,6 +15,11 @@ import upload from "../middlewares/multerProduct.js";
 const router = express.Router();
 
 // POST request to login an admin
+/**
+ * @route POST /api/v1/admin/login
+ * @desc Authenticate admin and return JWT token
+ * @access Public
+ */
 router.post(
   "/login",
   [
@@ -80,6 +85,11 @@ router.post(
 
 
 // Get all users
+/**
+ * @route GET /api/v1/admin/users
+ * @desc Get all registered users
+ * @access Private (Admin only)
+ */
 router.get('/users', adminTokenMiddleware, async (req, res) => {
   try {
     const users = await User.find({}, { password: 0 }); // Exclude password field
@@ -113,6 +123,11 @@ router.delete('/users/:id', adminTokenMiddleware, async (req, res) => {
 
 
 
+/**
+ * @route GET /api/v1/admin/dashboard
+ * @desc Get dashboard statistics (products, users, orders, revenue)
+ * @access Private (Admin only)
+ */
 router.get('/dashboard',adminTokenMiddleware, async (req, res) => {
   try {
     // Total Products 
@@ -293,6 +308,11 @@ router.get('/dashboard',adminTokenMiddleware, async (req, res) => {
 
 
 // Create a new product
+/**
+ * @route POST /api/v1/admin/products
+ * @desc Create a new product with images
+ * @access Private (Admin only)
+ */
 router.post('/products', upload.array('images'), async (req, res) => {
   const { name, description, MRP, discount, stock, category } = req.body;
   // const images = req.files.map((file) => file.filename);
@@ -324,6 +344,11 @@ router.post('/products', upload.array('images'), async (req, res) => {
 
 
 // Get all products for admin
+/**
+ * @route GET /api/v1/admin/products
+ * @desc Fetch all products
+ * @access Public (or Private based on usage)
+ */
 router.get('/products', async (req, res) => {
   try {
     const products = await Product.find();
@@ -336,6 +361,11 @@ router.get('/products', async (req, res) => {
 
 
 // Update a product
+/**
+ * @route PUT /api/v1/admin/product/:id
+ * @desc Update an existing product
+ * @access Private (Admin only)
+ */
 router.put('/product/:id', upload.array('images'), async (req, res) => {
   const { name, description, MRP, discount, stock, category } = req.body;
   const images = req.files ? req.files.map((file) => file.filename) : []; // Safely access req.files
@@ -370,6 +400,11 @@ router.put('/product/:id', upload.array('images'), async (req, res) => {
 });
 
 // Delete a product
+/**
+ * @route DELETE /api/v1/admin/product/:id
+ * @desc Delete a product by ID
+ * @access Private (Admin only)
+ */
 router.delete('/product/:id', async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
@@ -384,6 +419,11 @@ router.delete('/product/:id', async (req, res) => {
 });
 
 // Fetch all orders (Admin only)
+/**
+ * @route GET /api/v1/admin/orders
+ * @desc Fetch all orders
+ * @access Private (Admin only)
+ */
 router.get('/orders', adminTokenMiddleware, async (req, res) => {
   try {
     const orders = await Order.find()
@@ -404,6 +444,11 @@ router.get('/orders', adminTokenMiddleware, async (req, res) => {
 
 
 // Update order status (Admin only)
+/**
+ * @route PUT /api/v1/admin/order/:id
+ * @desc Update the status of an order
+ * @access Private (Admin only)
+ */
 router.put('/order/:id', adminTokenMiddleware, async (req, res) => {
   const { status } = req.body;
 

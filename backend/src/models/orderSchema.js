@@ -1,6 +1,18 @@
 import mongoose from 'mongoose';
 
 // Define the Order Schema
+/**
+ * Schema for Customer Orders.
+ * @typedef {Object} Order
+ * @property {ObjectId} user - Reference to the User who placed the order.
+ * @property {Array} orderItems - List of products in the order.
+ * @property {Object} shippingAddress - Shipping details.
+ * @property {Object} paymentInfo - Payment methods and status.
+ * @property {number} totalPrice - Total cost of the order.
+ * @property {string} status - Current status of the order (e.g., Pending, Shipped).
+ * @property {Date} createdAt - Timestamp of creation.
+ * @property {Date} updatedAt - Timestamp of last update.
+ */
 const orderSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -54,6 +66,10 @@ const orderSchema = new mongoose.Schema({
 }, {
   timestamps: true, // Automatically creates createdAt and updatedAt fields
 });
+
+// Indexes
+orderSchema.index({ user: 1 });
+orderSchema.index({ status: 1 });
 
 // Create and export the Order model using ES6 syntax
 const Order = mongoose.model('Order', orderSchema);

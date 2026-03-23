@@ -1,5 +1,13 @@
 import jwt from "jsonwebtoken";
 
+/**
+ * Middleware to verify admin privileges.
+ * 
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ * @returns {void}
+ */
 const adminTokenMiddleware = (req, res, next) => {
   // Get the token from the authorization header
   const token = req.headers.authorization?.split(" ")[1]; // Bearer <token>

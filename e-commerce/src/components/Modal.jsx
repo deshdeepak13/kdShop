@@ -1,5 +1,12 @@
-import React from 'react';
+import React from "react";
 
+/**
+ * Reusable Modal component.
+ *
+ * @param {Object} props - Component props
+ * @param {boolean} props.isOpen - Whether the modal is visible
+ * @param {React.ReactNode} props.children - Modal content
+ */
 const Modal = ({ isOpen, children }) => {
   if (!isOpen) return null;
 

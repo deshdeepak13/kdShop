@@ -1,26 +1,40 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { applyCouponToCart, removeCouponFromCart } from '../redux/cartSlice';
-import { useSnackbar } from './SnackbarProvider';
-import { FiCheckCircle, FiXCircle, FiAlertCircle, FiTag,FiInfo } from 'react-icons/fi';
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { applyCouponToCart, removeCouponFromCart } from "../redux/cartSlice";
+import { useSnackbar } from "./SnackbarProvider";
+import {
+  FiCheckCircle,
+  FiXCircle,
+  FiAlertCircle,
+  FiTag,
+  FiInfo,
+} from "react-icons/fi";
 
+/**
+ * Form to apply discount coupons to the card.
+ *
+ * @param {Object} props - Component props
+ * @param {boolean} props.disabled - Whether the form input is disabled
+ */
 const CouponForm = ({ disabled }) => {
   const showSnackbar = useSnackbar();
   const dispatch = useDispatch();
   const { coupon, couponError } = useSelector((state) => state.cart);
-  const [couponCode, setCouponCode] = useState('');
+  const [couponCode, setCouponCode] = useState("");
   const { token, user } = useSelector((state) => state.auth);
 
   const handleApplyCoupon = (e) => {
     e.preventDefault();
     if (couponCode.trim()) {
-      dispatch(applyCouponToCart(token, user.id, couponCode.trim(), showSnackbar));
+      dispatch(
+        applyCouponToCart(token, user.id, couponCode.trim(), showSnackbar)
+      );
     }
   };
 
   const handleRemoveCoupon = () => {
     dispatch(removeCouponFromCart(showSnackbar));
-    setCouponCode('');
+    setCouponCode("");
   };
 
   return (
@@ -70,7 +84,9 @@ const CouponForm = ({ disabled }) => {
       {coupon && (
         <div className="p-3 bg-green-900/50 border border-green-800 rounded-lg flex items-center gap-2 text-green-400">
           <FiCheckCircle className="flex-shrink-0" />
-          <span>Coupon <strong>{coupon}</strong> applied successfully!</span>
+          <span>
+            Coupon <strong>{coupon}</strong> applied successfully!
+          </span>
         </div>
       )}
 

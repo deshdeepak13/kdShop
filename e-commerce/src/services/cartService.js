@@ -12,6 +12,10 @@ import {
   // removeItemSuccess,
 } from '../redux/cartSlice'; // Import Redux actions
 
+/**
+ * Service to handle cart-related API calls.
+ */
+
 // Add item to cart
 export const addToCart = async (token, userId, productId, quantity) => {
   try {

@@ -7,6 +7,11 @@ import verifyTokenMiddleware from '../middlewares/verifyTokenMiddleware.js';
 const router = express.Router();
 
 // Validate coupon
+/**
+ * @route POST /api/v1/coupon/validate
+ * @desc Check if a coupon is valid
+ * @access Private
+ */
 router.post('/validate', verifyTokenMiddleware, validateCoupon);
 
 // Get all coupons

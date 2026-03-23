@@ -12,6 +12,11 @@ const initialState = {
   couponError:null,
 };
 
+/**
+ * Redux slice for shopping cart management.
+ * Handles adding/removing items, updating quantities, and applying coupons.
+ * Implements optimistic UI updates for better user experience.
+ */
 const cartSlice = createSlice({
   name: 'cart',
   initialState,

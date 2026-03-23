@@ -1,9 +1,21 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { FiChevronDown, FiChevronUp, FiInfo, FiXCircle, FiCalendar, FiFilter, FiSearch } from "react-icons/fi";
+import {
+  FiChevronDown,
+  FiChevronUp,
+  FiInfo,
+  FiXCircle,
+  FiCalendar,
+  FiFilter,
+  FiSearch,
+} from "react-icons/fi";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
+/**
+ * Page listing user's past orders with filtering options.
+ * Allows filtering by status and date range.
+ */
 const MyOrders = () => {
   // ... existing state declarations ...
   const [orders, setOrders] = useState([]);
@@ -14,14 +26,12 @@ const MyOrders = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
-   // Add mobile menu state
-   const [showMobileFilters, setShowMobileFilters] = useState(false);
-   const currentYear = new Date().getFullYear();
-   const yearOptions = Array.from({ length: 5 }, (_, i) => currentYear - i);
- 
-   // ... existing useEffect and filteredOrders logic ...
+  // Add mobile menu state
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const currentYear = new Date().getFullYear();
+  const yearOptions = Array.from({ length: 5 }, (_, i) => currentYear - i);
 
-  
+  // ... existing useEffect and filteredOrders logic ...
 
   const statusColorMap = {
     Pending: "bg-yellow-600 text-yellow-200",
@@ -35,11 +45,16 @@ const MyOrders = () => {
     const fetchOrders = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/orders/my-orders`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+        const response = await axios.get(
+          `${
+            import.meta.env.VITE_REACT_APP_BACKEND_BASEURL
+          }/api/v1/orders/my-orders`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
         setOrders(response.data);
       } catch (err) {
         setError("Failed to fetch orders. Please try again.");
@@ -52,14 +67,14 @@ const MyOrders = () => {
   }, []);
 
   const filteredOrders = orders
-    .filter((order) =>
-      order._id.toLowerCase().includes(searchTerm.toLowerCase()) // Filter by order ID
+    .filter(
+      (order) => order._id.toLowerCase().includes(searchTerm.toLowerCase()) // Filter by order ID
     )
-    .filter((order) => (statusFilter === "All" ? true : order.status === statusFilter))
+    .filter((order) =>
+      statusFilter === "All" ? true : order.status === statusFilter
+    )
     .filter((order) => {
       if (dateFilter === "All") return true;
-
-      
 
       if (dateFilter === "Last 30 Days") {
         const last30Days = new Date();
@@ -80,8 +95,6 @@ const MyOrders = () => {
   if (error) return <p className="text-red-500">{error}</p>;
 
   // const statusColorMap = { /* same as before */ };
-
- 
 
   return (
     <div className="flex flex-col md:flex-row bg-gray-900 text-white min-h-screen">
@@ -113,7 +126,9 @@ const MyOrders = () => {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-2">Search Order ID</label>
+                <label className="block text-sm font-medium mb-2">
+                  Search Order ID
+                </label>
                 <div className="relative">
                   <FiSearch className="absolute left-3 top-3.5 text-gray-400" />
                   <input
@@ -134,7 +149,9 @@ const MyOrders = () => {
                   className="w-full py-2 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500"
                 >
                   {Object.keys(statusColorMap).map((status) => (
-                    <option key={status} value={status}>{status}</option>
+                    <option key={status} value={status}>
+                      {status}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -146,9 +163,13 @@ const MyOrders = () => {
                   onChange={(e) => setDateFilter(e.target.value)}
                   className="w-full py-2 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500"
                 >
-                  {["All", "Last 30 Days", "Last Year", ...yearOptions].map((date) => (
-                    <option key={date} value={date}>{date}</option>
-                  ))}
+                  {["All", "Last 30 Days", "Last Year", ...yearOptions].map(
+                    (date) => (
+                      <option key={date} value={date}>
+                        {date}
+                      </option>
+                    )
+                  )}
                 </select>
               </div>
             </div>
@@ -163,7 +184,10 @@ const MyOrders = () => {
 
         {/* Search Bar */}
         <div className="mb-6">
-          <label htmlFor="search" className="block font-medium mb-2 text-gray-300">
+          <label
+            htmlFor="search"
+            className="block font-medium mb-2 text-gray-300"
+          >
             Search by Order ID:
           </label>
           <input
@@ -178,7 +202,10 @@ const MyOrders = () => {
 
         {/* Status Filter */}
         <div className="mb-6">
-          <label htmlFor="status" className="block font-medium mb-2 text-gray-300">
+          <label
+            htmlFor="status"
+            className="block font-medium mb-2 text-gray-300"
+          >
             Filter by Status:
           </label>
           <select
@@ -187,7 +214,14 @@ const MyOrders = () => {
             onChange={(e) => setStatusFilter(e.target.value)}
             className="w-full p-3 bg-gray-800 text-gray-100 border border-gray-700 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
           >
-            {["All", "Pending", "Processing", "Shipped", "Delivered", "Canceled"].map((status) => (
+            {[
+              "All",
+              "Pending",
+              "Processing",
+              "Shipped",
+              "Delivered",
+              "Canceled",
+            ].map((status) => (
               <option key={status} value={status}>
                 {status}
               </option>
@@ -197,7 +231,10 @@ const MyOrders = () => {
 
         {/* Date Filter */}
         <div className="mb-6">
-          <label htmlFor="date" className="block font-medium mb-2 text-gray-300">
+          <label
+            htmlFor="date"
+            className="block font-medium mb-2 text-gray-300"
+          >
             Filter by Ordered Date:
           </label>
           <select
@@ -206,7 +243,15 @@ const MyOrders = () => {
             onChange={(e) => setDateFilter(e.target.value)}
             className="w-full p-3 bg-gray-800 text-gray-100 border border-gray-700 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
           >
-            {["All", "Last 30 Days", "Last Year", "2022", "2021", "2019", "Older"].map((date) => (
+            {[
+              "All",
+              "Last 30 Days",
+              "Last Year",
+              "2022",
+              "2021",
+              "2019",
+              "Older",
+            ].map((date) => (
               <option key={date} value={date}>
                 {date}
               </option>
@@ -221,7 +266,11 @@ const MyOrders = () => {
           <div className="space-y-4">
             {[...Array(3)].map((_, i) => (
               <div key={i} className="p-4 bg-gray-800 rounded-lg">
-                <Skeleton height={120} baseColor="#1f2937" highlightColor="#374151" />
+                <Skeleton
+                  height={120}
+                  baseColor="#1f2937"
+                  highlightColor="#374151"
+                />
               </div>
             ))}
           </div>
@@ -233,12 +282,17 @@ const MyOrders = () => {
         ) : filteredOrders.length === 0 ? (
           <div className="text-center py-8">
             <FiInfo className="text-4xl text-blue-400 mx-auto mb-4" />
-            <p className="text-gray-300">No orders found matching your criteria</p>
+            <p className="text-gray-300">
+              No orders found matching your criteria
+            </p>
           </div>
         ) : (
           <div className="grid gap-4">
             {filteredOrders.map((order) => (
-              <div key={order._id} className="bg-gray-800 rounded-lg p-4 shadow-lg">
+              <div
+                key={order._id}
+                className="bg-gray-800 rounded-lg p-4 shadow-lg"
+              >
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-2">
@@ -247,21 +301,31 @@ const MyOrders = () => {
                         {new Date(order.createdAt).toLocaleDateString()}
                       </p>
                     </div>
-                    <h3 className="font-semibold truncate">Order #{order._id}</h3>
+                    <h3 className="font-semibold truncate">
+                      Order #{order._id}
+                    </h3>
                     <p className="text-gray-400 text-sm">
                       {order.orderItems.length} items • ₹{order.totalPrice}
                     </p>
                   </div>
 
                   <div className="flex items-center gap-4 w-full sm:w-auto">
-                    <span className={`px-3 py-1 rounded-full text-sm ${statusColorMap[order.status]}`}>
+                    <span
+                      className={`px-3 py-1 rounded-full text-sm ${
+                        statusColorMap[order.status]
+                      }`}
+                    >
                       {order.status}
                     </span>
                     <button
                       onClick={() => toggleOrderExpansion(order._id)}
                       className="flex items-center gap-1 text-blue-400 hover:text-blue-300"
                     >
-                      {expandedOrderId === order._id ? <FiChevronUp /> : <FiChevronDown />}
+                      {expandedOrderId === order._id ? (
+                        <FiChevronUp />
+                      ) : (
+                        <FiChevronDown />
+                      )}
                       <span className="sm:hidden">Details</span>
                     </button>
                   </div>
@@ -271,14 +335,19 @@ const MyOrders = () => {
                   <div className="mt-4 pt-4 border-t border-gray-700">
                     <div className="grid gap-4">
                       {order.orderItems.map((item) => (
-                        <div key={item.productId} className="flex items-start gap-4 p-3 bg-gray-700 rounded-lg">
+                        <div
+                          key={item.productId}
+                          className="flex items-start gap-4 p-3 bg-gray-700 rounded-lg"
+                        >
                           <img
                             src={`${item.imageUrl || "default-product.jpg"}`}
                             alt={item.productName}
                             className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
                           />
                           <div className="min-w-0">
-                            <h4 className="font-medium truncate">{item.productName}</h4>
+                            <h4 className="font-medium truncate">
+                              {item.productName}
+                            </h4>
                             <p className="text-sm text-gray-400">
                               ₹{item.price} × {item.quantity}
                             </p>
@@ -292,10 +361,12 @@ const MyOrders = () => {
                           <p>{order.shippingAddress.name}</p>
                           <p>{order.shippingAddress.address}</p>
                           <p>
-                            {order.shippingAddress.city}, {order.shippingAddress.state}
+                            {order.shippingAddress.city},{" "}
+                            {order.shippingAddress.state}
                           </p>
                           <p>
-                            {order.shippingAddress.country} - {order.shippingAddress.pincode}
+                            {order.shippingAddress.country} -{" "}
+                            {order.shippingAddress.pincode}
                           </p>
                           <p>Mobile: {order.shippingAddress.mobile}</p>
                         </div>

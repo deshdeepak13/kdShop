@@ -7,6 +7,10 @@ const initialState = {
   // id: null, // JWT or session token (if using tokens)
 };
 
+/**
+ * Redux slice for authentication state management.
+ * Handles login, logout, and token storage.
+ */
 const authSlice = createSlice({
   name: 'auth',
   initialState,

@@ -3,6 +3,10 @@ import OrderSummary from "./OrderSummary";
 import AddressForm from "./AddressForm";
 import Modal from "./ModalCheckout"; // Create the modal component
 
+/**
+ * Checkout page component.
+ * Manages delivery address, order summary, and finalizes purchase.
+ */
 const CheckoutPage = () => {
   const [address, setAddress] = useState(null); // Holds the saved address
   const [isEditing, setIsEditing] = useState(true); // Toggle between form and static view

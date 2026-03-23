@@ -8,20 +8,24 @@ import { FiAlertTriangle, FiInfo, FiShoppingBag, FiLock } from "react-icons/fi";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
+/**
+ * Cart component converting selected items, prices, and checkout actions.
+ * Fetches cart items from Redux store and handles quantity updates.
+ */
 const Cart = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [qtyArr, setQtyArr] = useState({});
   const { token, user, isLoggedIn } = useSelector((state) => state.auth);
-  const { cartItems, loading, error, coupon, discount } = useSelector((state) => state.cart);
+  const { cartItems, loading, error, coupon, discount } = useSelector(
+    (state) => state.cart
+  );
 
   // Fetch cart items on component mount or when token/user changes
   useEffect(() => {
     if (token && user?.id) {
       dispatch(setError(null));
       dispatch(fetchCartItems(token, user.id));
-      
-      
     }
   }, [dispatch, token, user]);
 
@@ -43,7 +47,10 @@ const Cart = () => {
     return total + price * quantity;
   }, 0);
 
-  const totalItems = cartItems.reduce((total, item) => total + (qtyArr[item.product._id] || item.quantity), 0);
+  const totalItems = cartItems.reduce(
+    (total, item) => total + (qtyArr[item.product._id] || item.quantity),
+    0
+  );
   const discountAmount = discount ? (totalAmount * discount) / 100 : 0;
   const finalAmountAfterDiscount = totalAmount - discountAmount;
 
@@ -55,7 +62,8 @@ const Cart = () => {
 
   const deliveryCharge = cartItems.length > 0 ? getDeliveryCharge() : 0;
   const platformFee = cartItems.length > 0 ? 10 : 0;
-  const totalAmountAfterCharges = finalAmountAfterDiscount + deliveryCharge + platformFee;
+  const totalAmountAfterCharges =
+    finalAmountAfterDiscount + deliveryCharge + platformFee;
 
   const handlePlaceOrder = () => navigate("/checkout");
 
@@ -63,7 +71,9 @@ const Cart = () => {
     return (
       <div className="min-h-[calc(100vh-5rem)] bg-gray-900 flex flex-col items-center justify-center p-4 text-center">
         <FiLock className="text-4xl text-blue-500 mb-4" />
-        <h2 className="text-2xl font-semibold text-gray-300 mb-2">Authentication Required</h2>
+        <h2 className="text-2xl font-semibold text-gray-300 mb-2">
+          Authentication Required
+        </h2>
         <p className="text-gray-400 mb-6 max-w-md">
           Please log in to view your cart and manage your shopping items.
         </p>
@@ -84,7 +94,9 @@ const Cart = () => {
         <div className="bg-gray-800 rounded-xl p-4 md:p-6 shadow-lg border border-gray-700">
           <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-700">
             <FiShoppingBag className="text-2xl text-blue-400" />
-            <h2 className="text-2xl font-bold text-gray-100">Your Shopping Cart</h2>
+            <h2 className="text-2xl font-bold text-gray-100">
+              Your Shopping Cart
+            </h2>
             <span className="ml-2 bg-gray-700 text-blue-400 px-3 py-1 rounded-full text-sm">
               {cartItems.length} items
             </span>
@@ -93,8 +105,15 @@ const Cart = () => {
           {loading ? (
             <div className="space-y-4">
               {[...Array(3)].map((_, i) => (
-                <div key={`skeleton-${i}`} className="p-4 bg-gray-700 rounded-lg">
-                  <Skeleton height={120} baseColor="#1f2937" highlightColor="#374151" />
+                <div
+                  key={`skeleton-${i}`}
+                  className="p-4 bg-gray-700 rounded-lg"
+                >
+                  <Skeleton
+                    height={120}
+                    baseColor="#1f2937"
+                    highlightColor="#374151"
+                  />
                 </div>
               ))}
             </div>
@@ -117,17 +136,22 @@ const Cart = () => {
                     key={`cartitem-${item.product._id}`}
                     quantity={qtyArr[item.product._id] || item.quantity}
                     product={item.product}
-                    onQuantityChange={(id, qty) => setQtyArr(prev => ({ ...prev, [id]: qty }))}
+                    onQuantityChange={(id, qty) =>
+                      setQtyArr((prev) => ({ ...prev, [id]: qty }))
+                    }
                   />
                 ))}
               </div>
-              
             </>
           ) : (
             <div className="text-center py-12">
               <FiInfo className="text-4xl text-blue-400 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-300 mb-2">Your Cart is Empty</h3>
-              <p className="text-gray-400 mb-6">Explore our products and add items to your cart!</p>
+              <h3 className="text-xl font-semibold text-gray-300 mb-2">
+                Your Cart is Empty
+              </h3>
+              <p className="text-gray-400 mb-6">
+                Explore our products and add items to your cart!
+              </p>
               <button
                 onClick={() => navigate("/products")}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md"
@@ -142,8 +166,10 @@ const Cart = () => {
       {/* Price Summary Section */}
       <aside className="lg:w-1/3 xl:w-1/4 p-4 md:p-6 lg:pl-2 xl:pl-6">
         <div className="bg-gray-800 rounded-xl p-4 md:p-6 shadow-lg border border-gray-700 sticky top-4">
-          <h2 className="text-xl font-bold text-blue-400 mb-6">Price Details</h2>
-          
+          <h2 className="text-xl font-bold text-blue-400 mb-6">
+            Price Details
+          </h2>
+
           {cartItems.length > 0 ? (
             <div className="space-y-4">
               <div className="flex justify-between text-gray-300">
@@ -197,16 +223,17 @@ const Cart = () => {
             </div>
           </div>
           <div className="sticky bottom-0 bg-gray-800 py-4 mt-6 border-t border-gray-700">
-                <button
-                  onClick={handlePlaceOrder}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white text-lg font-semibold py-3 px-6 rounded-lg shadow-lg transition-all  flex-col items-center justify-center gap-2"
-                >
-                  <span>Proceed to Checkout </span>
-                  <span className="text-white/80">₹{totalAmountAfterCharges.toFixed(2)}</span>
-                </button>
-              </div>
+            <button
+              onClick={handlePlaceOrder}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white text-lg font-semibold py-3 px-6 rounded-lg shadow-lg transition-all  flex-col items-center justify-center gap-2"
+            >
+              <span>Proceed to Checkout </span>
+              <span className="text-white/80">
+                ₹{totalAmountAfterCharges.toFixed(2)}
+              </span>
+            </button>
+          </div>
         </div>
-        
       </aside>
     </div>
   );

@@ -1,5 +1,13 @@
 import jwt from 'jsonwebtoken';
 
+/**
+ * Middleware to verify JWT tokens for user authentication.
+ * 
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ * @returns {void}
+ */
 const verifyTokenMiddleware = (req, res, next) => {
   // Get the token from the authorization header
   // console.log(req.headers.authorization)

@@ -5,6 +5,10 @@ const SnackbarContext = createContext();
 
 export const useSnackbar = () => useContext(SnackbarContext);
 
+/**
+ * Context Provider for managing global snackbar notifications.
+ * Wraps the app to allow useSnackbar hook usage anywhere.
+ */
 const SnackbarProvider = ({ children }) => {
   const [snackbar, setSnackbar] = useState({
     isVisible: false,
@@ -14,12 +18,15 @@ const SnackbarProvider = ({ children }) => {
     duration: 5000,
   });
 
-  const showSnackbar = useCallback(({ message, type = "info", position = "top-right", duration = 5000 }) => {
-    setSnackbar({ isVisible: true, message, type, position, duration });
-    setTimeout(() => {
-      setSnackbar((prev) => ({ ...prev, isVisible: false }));
-    }, duration);
-  }, []);
+  const showSnackbar = useCallback(
+    ({ message, type = "info", position = "top-right", duration = 5000 }) => {
+      setSnackbar({ isVisible: true, message, type, position, duration });
+      setTimeout(() => {
+        setSnackbar((prev) => ({ ...prev, isVisible: false }));
+      }, duration);
+    },
+    []
+  );
 
   return (
     <SnackbarContext.Provider value={showSnackbar}>

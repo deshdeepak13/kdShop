@@ -1,6 +1,21 @@
 import mongoose from 'mongoose';
 
 // Define the Product Schema
+// Define the Product Schema
+/**
+ * Schema for Products.
+ * @typedef {Object} Product
+ * @property {string} name - Name of the product.
+ * @property {string} description - Detailed description.
+ * @property {number} MRP - Maximum Retail Price.
+ * @property {number} discount - Discount percentage (0-100).
+ * @property {number} stock - Quantity available in stock.
+ * @property {Array<string>} imageUrl - List of image URLs (max 20).
+ * @property {number} ratings - Average rating (0-5).
+ * @property {number} numReviews - Total number of reviews.
+ * @property {string} category - Category of the product.
+ * @property {number} currentPrice - Virtual field: calculated price after discount.
+ */
 const productSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -57,6 +72,11 @@ const productSchema = new mongoose.Schema({
   toJSON: { virtuals: true }, // Include virtuals in JSON output
   toObject: { virtuals: true } // Include virtuals when converting to a plain object
 });
+
+// Indexes
+productSchema.index({ category: 1 });
+productSchema.index({ MRP: 1 });
+productSchema.index({ name: 'text', description: 'text' });
 
 // Virtual attribute: currentPrice
 productSchema.virtual('currentPrice').get(function () {
