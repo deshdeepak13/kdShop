@@ -69,7 +69,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 // Connect to MongoDB
-const dbURI = process.env.MONGODB_URI;
+const dbURI = process.env.MONGO_URI;
 mongoose.connect(dbURI)
 .then(() => console.log('Connected to MongoDB'))
 .catch((err) => console.error('MongoDB connection error:', err));
