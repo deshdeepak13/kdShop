@@ -31,6 +31,17 @@ import chatRoute from "./src/routes/chat.js";
 // Initialize Express
 const app = express();
 
+// Apply CORS before other middlewares, especially rate limiting
+app.use(cors({
+  origin: [
+    "https://kdshop13.netlify.app",
+    "http://localhost:5173",
+    "http://localhost:3000"
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+}));
+
 // Security Middleware
 // app.use(helmet());
 // app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
@@ -49,7 +60,6 @@ const limiter = rateLimit({
 app.use('/api', limiter);
 
 // Middleware to parse JSON
-app.use(cors());
 app.use(express.json());
 app.use('/public', express.static('public'));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
