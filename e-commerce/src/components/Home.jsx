@@ -23,7 +23,7 @@ const Home = () => {
         const response = await axios.get(
           `${
             import.meta.env.VITE_REACT_APP_BACKEND_BASEURL
-          }/api/v1/products?limit=100`
+          }/api/v1/products?limit=100`,
         );
         // Handle new response format { products, totalPages }
         if (response.data.products) {
@@ -105,15 +105,66 @@ const Home = () => {
           <div className="flex gap-5 justify-center sm:justify-start flex-wrap">
             {isLoading ? (
               skeletonItems.map((_, index) => (
-                <div key={index} className="bg-gray-800 rounded-xl p-4">
-                  <Skeleton height={200} className="mb-4 rounded-lg" />
-                  <Skeleton count={3} className="mb-2" />
+                <div
+                  key={index}
+                  className="w-64 rounded-xl shadow-lg overflow-hidden border border-gray-700 bg-gradient-to-br from-gray-800 to-gray-900 relative"
+                >
+                  <div className="w-full h-40">
+                    <Skeleton
+                      height="100%"
+                      borderRadius={0}
+                      baseColor="#374151"
+                      highlightColor="#4B5563"
+                      style={{ display: "block" }}
+                    />
+                  </div>
+                  <div className="p-4 flex flex-col w-full">
+                    <Skeleton
+                      height={20}
+                      className="mb-2"
+                      baseColor="#374151"
+                      highlightColor="#4B5563"
+                    />
+                    <div className="mt-2 flex items-center space-x-2">
+                      <Skeleton
+                        height={28}
+                        width={60}
+                        baseColor="#374151"
+                        highlightColor="#4B5563"
+                      />
+                    </div>
+                    <Skeleton
+                      height={16}
+                      width={60}
+                      className="mt-1"
+                      baseColor="#374151"
+                      highlightColor="#4B5563"
+                    />
+                    <div className="mt-4 flex space-x-2">
+                      <div className="flex-1">
+                        <Skeleton
+                          height={36}
+                          borderRadius={8}
+                          baseColor="#374151"
+                          highlightColor="#4B5563"
+                        />
+                      </div>
+                      <div className="w-[36px]">
+                        <Skeleton
+                          height={36}
+                          borderRadius={8}
+                          baseColor="#374151"
+                          highlightColor="#4B5563"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               ))
             ) : products.length > 0 ? (
               products.map((product) => {
                 const isWishlisted = wishlist.some(
-                  (item) => item.id === product._id
+                  (item) => item.id === product._id,
                 );
                 const imageUrl = product.imageUrl?.[0]
                   ? product.imageUrl[0].startsWith("http")
