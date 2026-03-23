@@ -27,6 +27,7 @@ import chatRoute from "./src/routes/chat.js";
 // import paymentRoute from "./routes/payment.js";
 // import dashboardRoute from "./routes/stats.js";
 
+app.set('trust proxy', 1);
 
 // Initialize Express
 const app = express();
